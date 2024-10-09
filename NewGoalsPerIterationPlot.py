@@ -3,12 +3,12 @@ from Goal import Goal
 from algorithm_execution import algorithm_execution
 import matplotlib.pyplot as plt
 
+#name in paper: New goals view
 
 class NewGoalsPerIterationPlot:
 
-    def __init__(self, file_path):
-        self.file_path = file_path
-        self.algorithm_execution = algorithm_execution(file_path)
+    def __init__(self, algorithm_execution):
+        self.algorithm_execution = algorithm_execution
         self.iterations = self.algorithm_execution.iterations
 
         self.current_goals_per_iteration = [iteration.current_goals for iteration in self.iterations]
@@ -37,9 +37,9 @@ class NewGoalsPerIterationPlot:
         fig, ax = plt.subplots()
 
         ax.plot(iteration_numbers, number_of_new_goals_per_iteration)
-        ax.set_xlabel('Iteration')
-        ax.set_ylabel('Number of New Goals')
-        ax.set_title('Number of New Goals per Iteration' + ' for ' + self.algorithm_execution.name)
+        ax.set_xlabel('Iteration number')
+        ax.set_ylabel('Number of New Current Goals')
+        #ax.set_title('Number of New Goals per Iteration' + ' for ' + self.algorithm_execution.name)
 
         if show:
             plt.show()

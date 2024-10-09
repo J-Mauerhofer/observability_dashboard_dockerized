@@ -1,0 +1,65 @@
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.colors import to_rgba
+
+# Example data with 50 individuals per population and assigned fronts
+# Each sublist represents a population, and each number represents the length of an individual's code
+populations = [
+    np.random.randint(20, 60, 50).tolist(),
+    np.random.randint(20, 60, 50).tolist(),
+    np.random.randint(20, 60, 50).tolist(),
+    np.random.randint(20, 60, 50).tolist()
+]
+
+# Example fronts for each population (for simplicity, just random fronts for now)
+fronts = [
+    np.random.randint(0, 5, 50).tolist(),
+    np.random.randint(0, 5, 50).tolist(),
+    np.random.randint(0, 5, 50).tolist(),
+    np.random.randint(0, 5, 50).tolist()
+]
+
+# Example selected individuals (for demonstration, randomly select some individuals)
+selected_individuals = [
+    [1, 10, 20],  # Selected individuals in the first population
+    [5, 15, 25],  # Selected individuals in the second population
+    [0, 12, 24],  # Selected individuals in the third population
+    [3, 18, 33]   # Selected individuals in the fourth population
+]
+
+# Generate more distinct shades of blue
+shades_of_blue = ['#1f77b4', '#17becf', '#aec7e8', '#7f7f7f', '#c7c7c7']
+
+def plot_populations_with_shades_and_highlights(populations, fronts, selected_individuals):
+    fig, axes = plt.subplots(len(populations), 1, figsize=(15, 10), sharex=True)
+
+    bar_width = 0.95  # Adjust the bar width to decrease spacing
+
+    for i, (population, front, selected) in enumerate(zip(populations, fronts, selected_individuals)):
+        # Sort population and front together based on front
+        sorted_population, sorted_front, sorted_selected = zip(*sorted(zip(population, front, range(len(population))), key=lambda x: x[1]))
+        colors = [shades_of_blue[f % len(shades_of_blue)] for f in sorted_front]
+
+        for j in range(len(sorted_population)):
+            if sorted_selected[j] in selected:
+                axes[i].bar(j, sorted_population[j], color=colors[j], width=bar_width, edgecolor='red', linewidth=2, hatch='//')
+            else:
+                axes[i].bar(j, sorted_population[j], color=colors[j], width=bar_width)
+
+        axes[i].set_ylim(0, max(max(populations)) + 10)
+        axes[i].set_yticks([])
+        axes[i].set_xticks([])
+        axes[i].set_title(f'Population {i}', loc='left')
+
+    axes[0].set_title('Initial', loc='left')
+    plt.xlabel('Individuals')
+
+    # Create a legend
+    handles = [plt.Rectangle((0,0),1,1, color=shades_of_blue[i % len(shades_of_blue)]) for i in range(5)] + [plt.Rectangle((0,0),1,1, edgecolor='red', facecolor='none', linewidth=2, hatch='//')]
+    labels = [f'Front {i}' for i in range(5)] + ['Selected']
+    plt.legend(handles, labels, loc='upper right')
+
+    plt.tight_layout()
+    plt.show()
+
+plot_populations_with_shades_and_highlights(populations, fronts, selected_individuals)

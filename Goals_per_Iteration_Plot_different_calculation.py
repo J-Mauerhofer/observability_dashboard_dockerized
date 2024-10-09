@@ -4,7 +4,7 @@ import numpy as np
 
 #name in paper: goals progress view
 
-class Goals_per_Iteration_Plot:
+class Goals_per_Iteration_Plot_different_calculation:
 
     def __init__(self, algorithm_execution):
         self.algorithm_execution = algorithm_execution
@@ -17,19 +17,19 @@ class Goals_per_Iteration_Plot:
     def get_number_of_current_goals_per_iteration(self):
         number_of_current_goals_per_iteration = []
         for iteration in self.iterations:
-            number_of_current_goals_per_iteration.append(len(iteration.current_goals))
+            number_of_current_goals_per_iteration.append(iteration.get_number_of_current_goals())
         return number_of_current_goals_per_iteration
     
     def get_number_of_covered_goals_per_iteration(self):
         number_of_covered_goals_per_iteration = []
         for iteration in self.iterations:
-            number_of_covered_goals_per_iteration.append(iteration.number_of_covered_goals)
+            number_of_covered_goals_per_iteration.append(iteration.get_number_of_covered_goals())
         return number_of_covered_goals_per_iteration
     
     def get_number_of_uncovered_goals_per_iteration(self):
         number_of_uncovered_goals_per_iteration = []
         for iteration in self.iterations:
-            number_of_uncovered_goals_per_iteration.append(iteration.number_of_uncovered_goals)
+            number_of_uncovered_goals_per_iteration.append(iteration.get_number_of_uncovered_goals())
         return number_of_uncovered_goals_per_iteration
 
 

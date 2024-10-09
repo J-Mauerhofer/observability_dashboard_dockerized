@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 from algorithm_execution import algorithm_execution
 import numpy as np
 
+#name in paper: New Individuals view
+
 class New_Individuals_Per_Population_Plot:
 
-    def __init__(self, file_path):
-        self.file_path = file_path
-        self.algorithm_execution = algorithm_execution(file_path)
+    def __init__(self, algorithm_execution):
+        self.algorithm_execution = algorithm_execution
         self.populations = [iteration.population for iteration in self.algorithm_execution.iterations]
 
         self.individuals_not_present_in_last_population = self.get_individuals_not_present_in_last_population()
@@ -38,11 +39,11 @@ class New_Individuals_Per_Population_Plot:
 
         for i in range(len(self.individuals_not_present_in_last_population)):
             ax.plot(i, len(self.individuals_not_present_in_last_population[i]), 'r.')
-            ax.plot(i, population_sizes[i], 'r.')
+            #ax.plot(i, population_sizes[i], 'r.')
             
-        ax.set_xlabel('Population')
+        ax.set_xlabel('Iteration number')
         ax.set_ylabel('Number of Individuals not present in last Population')
-        ax.set_title('Number of Individuals not present in last Population per Population' + ' for ' + self.algorithm_execution.name)
+        #ax.set_title('Number of Individuals not present in last Population per Population' + ' for ' + self.algorithm_execution.name)
 
         if show:
             plt.show()

@@ -5,9 +5,8 @@ from Population import Population
 
 
 class FrontPlots:
-    def __init__(self, file_path):
-        self.file_path = file_path
-        self.algorithm_execution = algorithm_execution(file_path)
+    def __init__(self, algorithm_execution):
+        self.algorithm_execution = algorithm_execution
 
         self.populations = [iteration.population for iteration in self.algorithm_execution.iterations]
     
@@ -35,9 +34,9 @@ class FrontPlots:
         fig, ax = plt.subplots()
 
         ax.plot(range(len(self.populations)), number_of_fronts_per_population)
-        ax.set_xlabel('Iteration')
+        ax.set_xlabel('Iteration number')
         ax.set_ylabel('Number of Fronts')
-        ax.set_title('Number of Fronts per Population' + ' for ' + self.algorithm_execution.name)
+        #ax.set_title('Number of Fronts per Population' + ' for ' + self.algorithm_execution.name)
 
         if show:
             plt.show()
@@ -63,9 +62,9 @@ class FrontPlots:
 
         # Plot the stacked area chart
         ax.stackplot(range(len(self.populations)), transposed_list)
-        ax.set_xlabel('Iteration')
+        ax.set_xlabel('Iteration number')
         ax.set_ylabel('Front Size')
-        ax.set_title('Front Sizes per Iteration' + ' for ' + self.algorithm_execution.name)
+        #ax.set_title('Front Sizes per Iteration' + ' for ' + self.algorithm_execution.name)
 
         if show:
             plt.show()

@@ -13,6 +13,9 @@ class algorithm_execution:
         #extract the name of the class and the package from the raw string
         self.name = self.extract_name()
 
+        #extract the total number of test goals for DynaMOSA
+        self.total_number_of_test_goals_for_dynamosa = self.extract_total_number_of_test_goals_for_dynamosa()
+
         #add the goals
         self.goals = self.extract_goals_from_raw_string_and_initialize_goals()
         """
@@ -55,6 +58,16 @@ class algorithm_execution:
 
         # Return the name of the class if found, otherwise throw an exception
         return match.group(1) if match else ValueError("No class name found")
+    
+    def extract_total_number_of_test_goals_for_dynamosa(self):
+        # Regular expression pattern to capture the total number of test goals for DynaMOSA
+        pattern = r'Total number of test goals for DYNAMOSA: (\d+)'
+
+        # Use re.search to find the match in the raw string
+        match = re.search(pattern, self.raw_string)
+
+        # Return the total number of test goals if found, otherwise throw an exception
+        return int(match.group(1)) if match else ValueError("No total number of test goals found")
 
     def extract_final_test_suite_string_from_raw_string(self):
         # Regular expression pattern to capture the final test suite

@@ -2,12 +2,11 @@ from algorithm_execution import algorithm_execution
 from OffspringPopulation import OffspringPopulation
 import matplotlib.pyplot as plt
 
-class FinalTestsFoundPerIterationPlot:
-    def __init__(self, file_path):
-        self.file_path = file_path
+#name in paper: Final tests view
 
-        #initialize the algorithm_execution object with the file_path
-        self.algorithm_execution = algorithm_execution(file_path)
+class FinalTestsFoundPerIterationPlot:
+    def __init__(self, algorithm_execution):
+        self.algorithm_execution = algorithm_execution
 
         #for quick access
         self.tests_in_final_test_suite = self.algorithm_execution.final_test_suite.individuals_in_final_test_suite
@@ -36,10 +35,10 @@ class FinalTestsFoundPerIterationPlot:
         fig, ax = plt.subplots()
         
         # Plot the data
-        ax.plot(range(len(number_of_final_tests_generated_per_iteration)), number_of_final_tests_generated_per_iteration)
-        ax.set_xlabel('Iteration')
+        ax.plot(range(-1, len(number_of_final_tests_generated_per_iteration) - 1), number_of_final_tests_generated_per_iteration)
+        ax.set_xlabel('Iteration number')
         ax.set_ylabel('Number of Final Tests generated')
-        ax.set_title('Number of Final Tests generated per Iteration' + ' for ' + self.algorithm_execution.name)
+        #ax.set_title('Number of Final Tests generated per Iteration' + ' for ' + self.algorithm_execution.name)
 
         if show:
             plt.show()
