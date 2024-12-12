@@ -1,4 +1,5 @@
 import os
+import time  # Import time for tracking elapsed time
 import matplotlib
 matplotlib.use('Agg')  # Use the Agg backend for non-GUI rendering
 import matplotlib.pyplot as plt
@@ -13,6 +14,9 @@ from Goals_per_Iteration_Plot_different_calculation import Goals_per_Iteration_P
 from GoalsIntersectionPlot import GoalsIntersectionPlot
 from AdditionOfNewGoalsPlot import AdditionOfNewGoalsPlot
 from algorithm_execution import algorithm_execution
+
+# Define the size threshold (in kilobytes)
+SIZE_THRESHOLD_KB = 500000  # 500,000 KB = ~500 MB
 
 # Function to handle the plotting of a single file
 def plot_file(file_path, timeout=60):
@@ -88,8 +92,8 @@ def plot_class_with_all_plots(algorithm_execution_instance, axes):
         figs.append(None)
         print(f"Error plotting AdditionOfNewGoalsPlot: {e}")
 
-    for col, fig in enumerate(figs):
-        row, col = divmod(col, 3)
+    for idx, fig in enumerate(figs):
+        row, col = divmod(idx, 3)
         if fig:
             fig.canvas.draw()
             img = fig.canvas.buffer_rgba()
@@ -101,22 +105,39 @@ def plot_class_with_all_plots(algorithm_execution_instance, axes):
             axes[row, col].set_axis_off()
 
 # Plot the data for all log files in a given directory and save to PDFs
-def plot_all_files_in_directory(directory_path, timeout=60):
+def plot_all_files_in_directory(directory_path, timeout=60, size_threshold_kb=SIZE_THRESHOLD_KB):
     pdf_path = os.path.join(directory_path, 'all_plots_comparison.pdf')
     log_files = [file for file in os.listdir(directory_path) if file.endswith(".txt")]
+    total_files = len(log_files)
+    start_time = time.time()
 
-    print(f"Found {len(log_files)} .txt files in {directory_path}")
+    print(f"Found {total_files} .txt files in {directory_path}")
 
     if not log_files:
         print("No log files found.")
         return
 
-    too_large_files = []  # List to track files that took too long
+    too_large_files = []  # List to track files that are too large
+    skipped_files = []     # List to track files that are skipped due to size
 
     with PdfPages(pdf_path) as pdf:
-        for file in log_files:
+        for i, file in enumerate(log_files, start=1):
             file_path = os.path.join(directory_path, file)
-            print(f"Now plotting {file_path} and saving to {pdf_path}")
+            file_size_kb = os.path.getsize(file_path) / 1024  # Size in KB
+
+            if file_size_kb > size_threshold_kb:
+                print(f"Skipping file {file} (size: {file_size_kb:.2f} KB) - exceeds threshold of {size_threshold_kb} KB")
+                too_large_files.append(file)
+                # Optionally, you can create a PDF page indicating the file was skipped
+                fig, ax = plt.subplots(figsize=(8.5, 11))
+                ax.text(0.5, 0.5, f"Skipped file:\n{file}\n(Size: {file_size_kb:.2f} KB)", 
+                        ha='center', va='center', fontsize=12, color='orange')
+                ax.set_axis_off()
+                pdf.savefig(fig)
+                plt.close(fig)
+                continue
+
+            print(f"Now plotting {file_path} and saving to {pdf_path} (size: {file_size_kb:.2f} KB)")
             with ThreadPoolExecutor(max_workers=1) as executor:
                 future = executor.submit(plot_file, file_path, timeout)
                 try:
@@ -130,34 +151,51 @@ def plot_all_files_in_directory(directory_path, timeout=60):
                     print(f"File {file} took too long to generate.")
                     too_large_files.append(file)
                     fig, ax = plt.subplots(figsize=(8.5, 11))
-                    ax.text(0.5, 0.5, f"Error: {file}\ntook too long to generate", ha='center', va='center', fontsize=12, color='red')
+                    ax.text(0.5, 0.5, f"Error: {file}\ntook too long to generate", 
+                            ha='center', va='center', fontsize=12, color='red')
                     ax.set_axis_off()
                     pdf.savefig(fig)
                     plt.close(fig)
+
+            # Calculate progress and time elapsed
+            elapsed_time = time.time() - start_time
+            progress_percentage = (i / total_files) * 100
+            remaining_files = total_files - i
+
+            print("\n\n\n\n###############################################################################################################\n\n\n\n")
+            print(f"Progress: {i}/{total_files} ({progress_percentage:.2f}%) | "
+                  f"Processed: {i} | Remaining: {remaining_files} | "
+                  f"Elapsed Time: {elapsed_time:.2f} seconds")
+            print("\n\n\n\n###############################################################################################################\n\n\n\n")
 
     # If there are large files, generate a second PDF with their names
     if too_large_files:
         larger_pdf_path = os.path.join(directory_path, 'larger_files.pdf')
         with PdfPages(larger_pdf_path) as pdf:
             fig, ax = plt.subplots(figsize=(8.5, 11))
-            ax.text(0.5, 0.9, "Files that took too long to generate:", ha='center', va='top', fontsize=16, weight='bold')
+            ax.text(0.5, 0.95, "Files that were too large to process:", 
+                    ha='center', va='top', fontsize=16, weight='bold')
             for i, file in enumerate(too_large_files, start=1):
-                ax.text(0.5, 0.9 - i * 0.05, file, ha='center', va='top', fontsize=12)
+                ax.text(0.5, 0.95 - i * 0.05, file, ha='center', va='top', fontsize=12)
             ax.set_axis_off()
             pdf.savefig(fig)
             plt.close(fig)
 
+    print(f"Processing completed for directory: {directory_path}")
+    if too_large_files:
+        print(f"{len(too_large_files)} files were too large and skipped. See 'larger_files.pdf' for details.")
+
 # Plot the data for all log files in the given list of directories and save to PDFs
-def plot_all_files_in_directories(directories, timeout=60):
+def plot_all_files_in_directories(directories, timeout=60, size_threshold_kb=SIZE_THRESHOLD_KB):
     for directory in directories:
         print(f"Processing directory: {directory}")
-        plot_all_files_in_directory(directory, timeout=timeout)
+        plot_all_files_in_directory(directory, timeout=timeout, size_threshold_kb=size_threshold_kb)
 
 # List of directories containing log files
 directories = [
-    #r"C:\Users\Julian Seminar\Desktop\Log files temporaer jgaap"
-    #r"C:\Users\Julian Seminar\Desktop\log files in general\new log files september\logFiles100_jgaap"
-    r"C:\Users\Julian Seminar\Desktop\log files in general\new log files september\100_jgaap_logFiles_guiDriver$runStatisticalAnalysisDriver"
+    #r"C:\Users\Julian Seminar\Desktop\shared ubuntu september24\Log files from automated evosuite runs"
+    r"C:\Users\Julian Seminar\Desktop\shared ubuntu september24\Test"
+
 ]
 
 # Plot the data and save to PDFs
