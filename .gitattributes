@@ -1,0 +1,2 @@
+example_logs/logFilede.outstare.fortbattleplayer.gui.battlefield.BattlefieldCell.txt filter=lfs diff=lfs merge=lfs -text
+example_logs/logFilede.outstare.fortbattleplayer.player.actions.HitAction.txt filter=lfs diff=lfs merge=lfs -text
