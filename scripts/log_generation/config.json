@@ -1,0 +1,11 @@
+{
+    "classes_under_test": [
+      "com.example.Battlefieldcell",
+      "com.example.HitAction"
+    ],
+    "classpath": "target/classes",
+    "seed": 12345,
+    "jar_path": "/home/vboxuser/79_twfbplayer/evosuite-master-1.2.1-SNAPSHOT.jar",
+    "base_directory": "/home/vboxuser/79_twfbplayer"
+  }
+  
