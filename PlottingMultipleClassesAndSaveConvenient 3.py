@@ -4,15 +4,15 @@ matplotlib.use('Agg')  # Use the Agg backend for non-GUI rendering
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
-from New_Individuals_Per_Population_Plot import New_Individuals_Per_Population_Plot
-from FinalTestsFoundPerIterationPlot import FinalTestsFoundPerIterationPlot
-from Goals_per_Iteration_Plot import Goals_per_Iteration_Plot
-from FrontPlots import FrontPlots
-from NewGoalsPerIterationPlot import NewGoalsPerIterationPlot
-from Goals_per_Iteration_Plot_different_calculation import Goals_per_Iteration_Plot_different_calculation
-from GoalsIntersectionPlot import GoalsIntersectionPlot
-from AdditionOfNewGoalsPlot import AdditionOfNewGoalsPlot
-from algorithm_execution import algorithm_execution
+from src.Visualizations.Plots.New_Individuals_Per_Population_Plot import New_Individuals_Per_Population_Plot
+from Visualizations.Plots.FinalTestsFoundPerIterationPlot import FinalTestsFoundPerIterationPlot
+from src.Visualizations.Plots.Goals_per_Iteration_Plot import Goals_per_Iteration_Plot
+from Visualizations.Plots.FrontPlots import FrontPlots
+from src.Visualizations.Plots.NewGoalsPerIterationPlot import NewGoalsPerIterationPlot
+from src.Visualizations.Plots.Goals_per_Iteration_Plot_different_calculation import Goals_per_Iteration_Plot_different_calculation
+from src.Visualizations.Plots.GoalsIntersectionPlot import GoalsIntersectionPlot
+from Visualizations.Plots.AdditionOfNewGoalsPlot import AdditionOfNewGoalsPlot
+from DynaMOSA_Model.algorithm_execution import algorithm_execution
 
 # Function to handle the plotting of a single file
 def plot_file(file_path, timeout=60):
@@ -154,7 +154,7 @@ directories = [
     #r"C:\Users\Julian Seminar\Desktop\36_schemy_copy"
     #r"C:\Users\Julian Seminar\Desktop\log files in general\new log files september"
     #r"C:\Users\Julian Seminar\Desktop\Log files of demos in the paper",
-    r"C:\Users\Julian Seminar\Desktop\Log files temporaer jgaap"
+    r"C:\Users\Julian Seminar\Desktop\Examples for paper"
     ]
 
 # Plot the data and save to PDFs
