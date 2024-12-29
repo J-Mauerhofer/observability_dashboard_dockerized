@@ -1,6 +1,7 @@
 import re
-from SpecificInformationToIndividual import SpecificInformationToIndividual
+from src.DynaMOSA_Model.SpecificInformationToIndividual import SpecificInformationToIndividual
 from src.DynaMOSA_Model.Individual_in_Offspring_Population import IndividualInOffspringPopulation
+
 
 class OffspringPopulation(SpecificInformationToIndividual):
 

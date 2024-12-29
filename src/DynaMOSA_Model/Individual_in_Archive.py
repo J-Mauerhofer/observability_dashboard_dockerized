@@ -1,6 +1,6 @@
 import re
 from src.DynaMOSA_Model.Individual import Individual
-from SpecificInformationToIndividual import SpecificInformationToIndividual
+from src.DynaMOSA_Model.SpecificInformationToIndividual import SpecificInformationToIndividual
 
 class Individual_In_Archive(SpecificInformationToIndividual):
 

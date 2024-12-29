@@ -1,4 +1,4 @@
-from SpecificInformationToIndividual import SpecificInformationToIndividual
+from src.DynaMOSA_Model.SpecificInformationToIndividual import SpecificInformationToIndividual
 
 class Individual:
 

@@ -1,6 +1,11 @@
 import os
+import sys
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
+
+# Add the project base directory (new_clone) to sys.path
+project_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+sys.path.insert(0, project_base_dir)
 
 # Standardize all imports to absolute imports
 from src.DynaMOSA_Model.algorithm_execution import algorithm_execution

@@ -1,18 +1,26 @@
 import os
 import matplotlib
 matplotlib.use('Agg')  # Use the Agg backend for non-GUI rendering
+import sys
+
+
+# Add the project base directory (new_clone) to sys.path
+project_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+sys.path.insert(0, project_base_dir)
+
+
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from src.Visualizations.Plots.New_Individuals_Per_Population_Plot import New_Individuals_Per_Population_Plot
-from Visualizations.Plots.FinalTestsFoundPerIterationPlot import FinalTestsFoundPerIterationPlot
+from src.Visualizations.Plots.FinalTestsFoundPerIterationPlot import FinalTestsFoundPerIterationPlot
 from src.Visualizations.Plots.Goals_per_Iteration_Plot import Goals_per_Iteration_Plot
-from Visualizations.Plots.FrontPlots import FrontPlots
+from src.Visualizations.Plots.FrontPlots import FrontPlots
 from src.Visualizations.Plots.NewGoalsPerIterationPlot import NewGoalsPerIterationPlot
 from src.Visualizations.Plots.Goals_per_Iteration_Plot_different_calculation import Goals_per_Iteration_Plot_different_calculation
 from src.Visualizations.Plots.GoalsIntersectionPlot import GoalsIntersectionPlot
-from Visualizations.Plots.AdditionOfNewGoalsPlot import AdditionOfNewGoalsPlot
-from DynaMOSA_Model.algorithm_execution import algorithm_execution
+from src.Visualizations.Plots.AdditionOfNewGoalsPlot import AdditionOfNewGoalsPlot
+from src.DynaMOSA_Model.algorithm_execution import algorithm_execution
 
 # Function to handle the plotting of a single file
 def plot_file(file_path, timeout=60):
