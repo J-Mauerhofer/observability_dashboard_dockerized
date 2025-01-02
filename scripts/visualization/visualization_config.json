@@ -1,5 +1,8 @@
 {
-    "directories": [
-        "C:\\Users\\Julian Seminar\\Desktop\\Examples for paper"
-    ]
+    "input_directory": "C:/Users/Julian Seminar/Desktop/Examples for paper",
+    "output_filename": "default_analysis.pdf",
+    "plots": ["new_individuals", "final_tests", "goals_per_iteration"],
+    "strategy": "consolidated",
+    "max_workers": 2,
+    "timeout": 120
 }

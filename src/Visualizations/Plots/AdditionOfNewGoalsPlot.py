@@ -33,10 +33,21 @@ class AdditionOfNewGoalsPlot:
         ax.plot(x_values, y_values)
         ax.set_xlabel('Iteration number')
         ax.set_ylabel('Number of goals not among the initial goals')
-        #ax.set_title('Number of goals not among the initial goals per Iteration' + ' for ' + self.algorithm_execution.name)
-        title = 'Number of goals that did not exist at the start' + ' for ' + self.algorithm_execution.name
-        
 
+        # Add title with good spacing and formatting
+        ax.set_title('Number of Goals That Did Not Exist at Start', 
+                    pad=20,        # Add padding above the title
+                    fontsize=14,   # Larger font size
+                    fontweight='bold')  # Make it bold
+        
+        # Add class name as subtitle with smaller font
+        ax.text(0.5, 1.02,         # Position it above the main title
+                self.algorithm_execution.name,
+                horizontalalignment='center',
+                transform=ax.transAxes,
+                fontsize=10,
+                style='italic')
+        
         if show:
             plt.show()
         
