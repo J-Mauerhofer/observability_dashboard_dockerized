@@ -11,6 +11,10 @@ from datetime import datetime
 CUSTOM_EVOSUITE_JAR_LOCAL_PATH = "PATH_TO_EVOSUITE_JAR/evosuite-X.Y.Z.jar"
 STANDALONE_RUNTIME_LOCAL_PATH  = "PATH_TO_EVOSUITE_JAR/evosuite-standalone-runtime-X.Y.Z.jar"
 
+CUSTOM_EVOSUITE_JAR_LOCAL_PATH = os.path.join("..", "EvoSuite", "evosuite-master-1.2.1-SNAPSHOT.jar")
+STANDALONE_RUNTIME_LOCAL_PATH = os.path.join("..", "EvoSuite", "evosuite-standalone-runtime-1.0.6.jar")
+
+
 LOG_DIR_NAME = "LogFiles_EvoSuiteLogger"
 
 def copy_if_missing(src, dest):
@@ -26,7 +30,6 @@ def build_log_filename(class_name=None):
     otherwise use logsMultipleClasses_<timestamp>.txt.
     """
     if class_name:
-        # Replace dots with underscores in class name
         clean_name = class_name.replace('.', '_')
         return f"logs{clean_name}.txt"
     else:
@@ -62,7 +65,7 @@ def handle_no_config_mode(unknown_args):
         print(f"[ERROR] The project root must be an absolute path: {project_root}")
         sys.exit(1)
 
-    # The rest are the EvoSuite parameters
+    # The rest are EvoSuite parameters
     evosuite_args = unknown_args[1:]
 
     # Move to the project root
@@ -90,8 +93,7 @@ def handle_no_config_mode(unknown_args):
     log_file_name = build_log_filename(class_name)
     log_file_path = os.path.join(LOG_DIR_NAME, log_file_name)
 
-    # Construct the full command
-    # Example: java -jar evosuite.jar [evosuite_args...]
+    # Construct the full command for EvoSuite
     command = ["java", "-jar", evosuite_jar_name] + evosuite_args
 
     print(f"[INFO] Running EvoSuite with arguments: {' '.join(evosuite_args)}")
@@ -148,14 +150,10 @@ def handle_config_mode(config_file):
         parameters  = config.get("parameters", {})
 
         for loc in locations:
-            # e.g. "target/classes"
             path_entry = loc.get("path", "")
             classes    = loc.get("classes", [])
 
-            # For each class, run EvoSuite
             for cls in classes:
-                # Build the command
-                # base command: java -jar evosuite.jar -class <cls> -projectCP <path_entry>
                 command = [
                     "java",
                     "-jar",
@@ -163,18 +161,13 @@ def handle_config_mode(config_file):
                     "-class", cls,
                     "-projectCP", path_entry
                 ]
-
-                # Append extra parameters from "parameters" dict
-                # E.g. {"-criterion": "branch", "-Dsearch_budget": "30"}
                 for param_key, param_value in parameters.items():
                     command.append(param_key)
                     command.append(param_value)
 
-                # Prepare log filename
                 log_file_name = build_log_filename(cls)
                 log_file_path = os.path.join(LOG_DIR_NAME, log_file_name)
 
-                # Run
                 run_log.write(f"\n[INFO] Running EvoSuite for class {cls} in {path_entry}\n")
                 run_log.write(f"[INFO] Command: {' '.join(command)}\n")
 
@@ -190,8 +183,9 @@ def main():
     parser = argparse.ArgumentParser(
         description="Script for running a custom EvoSuite version with logging."
     )
+    # No short option here: only --config
     parser.add_argument(
-        "--config", "-c",
+        "--config",
         help="Absolute path to the JSON configuration file (for multi-class sequential runs).",
         default=None
     )
@@ -202,7 +196,6 @@ def main():
         handle_config_mode(known_args.config)
     else:
         handle_no_config_mode(unknown_args)
-
 
 if __name__ == "__main__":
     main()
