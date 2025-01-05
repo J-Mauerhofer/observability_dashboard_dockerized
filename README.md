@@ -11,11 +11,11 @@
 - [Project Structure](#project-structure)
 - [Installation](#installation)
   - [Prerequisites](#prerequisites)
-    - [Prerequisites for Visualization Tool](#prerequisites-for-visualization-tool)
-    - [Prerequisites for Log Generation Tool](#prerequisites-for-log-generation-tool)
+    - [Prerequisites for EvoSuite Visualize](#prerequisites-for-visualization-tool)
+    - [Prerequisites for EvoSuite Logger](#prerequisites-for-log-generation-tool)
   - [Setup](#setup)
-    - [Setup for Visualization Tool](#setup-for-visualization-tool)
-    - [Setup for Log Generation Tool](#setup-for-log-generation-tool)
+    - [Setup for EvoSuite Visualizer](#setup-for-visualization-tool)
+    - [Setup for EvoSuite Logger](#setup-for-log-generation-tool)
 - [Usage](#usage)
   - [Visualization Tool Usage](#visualization-tool-usage)
   - [Log Generation Tool Usage](#log-generation-tool-usage)
@@ -44,7 +44,7 @@ These tools work together to support academic research and practical analysis, o
 
 ## Features
 
-### Visualization Tool
+### Evosuite Visualizer
 
 The EvoSuite Visualizer processes log files generated during the EvoSuite testing process and creates insightful visualizations. Key features include:
 
@@ -56,7 +56,7 @@ The EvoSuite Visualizer processes log files generated during the EvoSuite testin
 
 * Parallel processing to handle large log files efficiently.
 
-### Log Generation Tool
+### EvoSuite Logger
 
 [PLACEHOLDER: Describe the key features of the EvoSuite Logger. Highlight its role in capturing detailed information about test generation processes, and explain what kind of logs it produces.]
 
@@ -80,27 +80,27 @@ The EvoSuite Visualizer processes log files generated during the EvoSuite testin
 
 ### Prerequisites
 
-#### Prerequisites for Visualization Tool
+#### Prerequisites for EvoSuite Visualizer
 
 [PLACEHOLDER: List the system requirements and dependencies needed to run the visualization tool. Mention specific versions of Python or libraries, if applicable.]
 
-#### Prerequisites for Log Generation Tool
+#### Prerequisites for EvoSuite Logger
 
 [PLACEHOLDER: List the system requirements and dependencies needed to run the log generation tool. Mention any unique dependencies or requirements for this tool.]
 
 ### Setup
 
-#### Setup for Visualization Tool
+#### Setup for EvoSuite Visualizer
 
 The EvoSuite Visualizer is ready to use immediately after cloning the GitHub repository. To use it, simply run the run_visualizations.py script and pass it paramters or use alternative methods of communicating with the script as described in the usage section. 
 
-#### Setup for Log Generation Tool
+#### Setup for EvoSuite Logger
 
 [PLACEHOLDER: Provide step-by-step instructions for setting up the log generation tool. Include any additional setup steps specific to this tool.]
 
 ## Usage
 
-### Visualization Tool Usage
+### EvoSuite Visualizer Usage
 
 To use the visualization tool, run the run_visualizations.py script with the required parameters.
 
