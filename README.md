@@ -5,6 +5,7 @@
 ## Table of Contents
 
 - [Overview](#overview)
+- [Quick Start Demo](#quick-start-demo)
 - [Features](#features)
   - [EvoSuite Visualizer](#evosuite-visualizer)
   - [EvoSuite Logger](#evosuite-logger)
@@ -41,6 +42,68 @@ The Observability Dashboard for EvoSuite is designed to enhance the transparency
 **EvoSuite Logger**: Hosted on a separate GitHub repository (GitHub Link), this tool generates detailed logs during the execution of EvoSuite. While it can be run independently, this project includes a convenient script to simplify its use.
 
 These tools work together to support academic research and practical analysis, offering a comprehensive view of EvoSuite's operation and enabling users to better understand and improve its behavior. The EvoSuite Visualizer can only parse logs created by the EvoSuite Logger, so naturally, the tools are designed to first run the logger and then feed its output to the visualizer. However, the logs obtained by the logger could be repurposed for different tasks, such as integration into other coding projects.
+
+
+# Quick Start Demo
+
+## Prerequisites
+
+Before running the demo, ensure you have the following installed:
+
+* Java 8 JDK
+* Apache Maven 3.1 or higher
+* Python (recent version)
+* Python packages:
+  * matplotlib
+  * numpy
+
+## Running the Demo
+
+### 1. Set Up the Tutorial Stack Class
+
+Open your terminal and execute the following commands:
+
+```bash
+wget http://evosuite.org/files/tutorial/Tutorial_Stack.zip
+unzip Tutorial_Stack.zip
+cd Tutorial_Stack
+mvn compile
+```
+
+### 2. Generate Log Files
+
+Open the root directory of this project in a terminal.
+
+Navigate to the log generation scripts directory:
+
+```bash
+cd scripts/log_generation
+```
+
+Run the EvoSuite Logger (replace the path with your absolute path to the directory Tutorial_Stack):
+```bash
+python EvosuiteLogger.py "/ABSOLUTE_PATH_TO_TUTORIAL_STACK" -class tutorial.Stack -projectCP target/classes
+```
+
+The log file will be generated in Tutorial_Stack/LogFiles_EvoSuiteLogger as logstutorial_Stack.txt.
+
+### 3. Create Visualizations
+
+Navigate to the visualization scripts directory:
+```bash
+cd ../../scripts/visualization
+```
+
+Generate visualizations (replace the path with your absolute path to the directory Tutorial_Stack):
+```bash
+python EvosuiteVisualizer.py --input_directory "/PATH_TO_TUTORIAL_STACK/LogFiles_EvoSuiteLogger"
+```
+
+Now we obtained the visualizations. The visualizations outputs are placed in a the directory Tutorial_Stack/LogFiles_EvoSuiteLogger/visualization.
+
+Here you can see the visualizations (you might get different looking visualizations due to different seeds):
+![Visualization Example](visualization_examples/visualization-20250106-010006-1.jpg)
+
 
 ## Features
 
