@@ -7,13 +7,15 @@ import subprocess
 import argparse
 from datetime import datetime
 
-# Adjust these paths to point to where you store your custom EvoSuite JAR and runtime locally
-CUSTOM_EVOSUITE_JAR_LOCAL_PATH = "PATH_TO_EVOSUITE_JAR/evosuite-X.Y.Z.jar"
-STANDALONE_RUNTIME_LOCAL_PATH  = "PATH_TO_EVOSUITE_JAR/evosuite-standalone-runtime-X.Y.Z.jar"
+# --- Automatically compute paths relative to this script’s directory ---
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
-CUSTOM_EVOSUITE_JAR_LOCAL_PATH = os.path.join("..", "EvoSuite", "evosuite-master-1.2.1-SNAPSHOT.jar")
-STANDALONE_RUNTIME_LOCAL_PATH = os.path.join("..", "EvoSuite", "evosuite-standalone-runtime-1.0.6.jar")
+# If your EvoSuite folder is two levels above (e.g. NEW_CLONE/EvoSuite while script is at NEW_CLONE/scripts/log_generation),
+# you might need:  os.path.join(script_dir, "..", "..", "EvoSuite", ...)
+# Adjust as needed if the folder layout differs.
 
+CUSTOM_EVOSUITE_JAR_LOCAL_PATH = os.path.join(script_dir, "..", "..", "EvoSuite", "evosuite-master-1.2.1-SNAPSHOT.jar")
+STANDALONE_RUNTIME_LOCAL_PATH  = os.path.join(script_dir, "..", "..", "EvoSuite", "evosuite-standalone-runtime-1.0.6.jar")
 
 LOG_DIR_NAME = "LogFiles_EvoSuiteLogger"
 
@@ -71,9 +73,11 @@ def handle_no_config_mode(unknown_args):
     # Move to the project root
     os.chdir(project_root)
 
-    # Copy JAR and runtime if missing
+    # Determine the names we will copy into the project root
     evosuite_jar_name = os.path.basename(CUSTOM_EVOSUITE_JAR_LOCAL_PATH)
     standalone_name   = os.path.basename(STANDALONE_RUNTIME_LOCAL_PATH)
+
+    # Copy JAR and runtime if missing
     copy_if_missing(CUSTOM_EVOSUITE_JAR_LOCAL_PATH, evosuite_jar_name)
     copy_if_missing(STANDALONE_RUNTIME_LOCAL_PATH,  standalone_name)
 
@@ -85,7 +89,7 @@ def handle_no_config_mode(unknown_args):
     if "-class" in evosuite_args:
         try:
             idx = evosuite_args.index("-class")
-            class_name = evosuite_args[idx+1]
+            class_name = evosuite_args[idx + 1]
         except (IndexError, ValueError):
             pass
 
@@ -183,7 +187,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Script for running a custom EvoSuite version with logging."
     )
-    # No short option here: only --config
+    # Only --config, no short option to avoid collision with '-class'
     parser.add_argument(
         "--config",
         help="Absolute path to the JSON configuration file (for multi-class sequential runs).",
