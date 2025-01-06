@@ -34,7 +34,7 @@ Navigate to the log generation scripts directory:
 cd scripts/log_generation
 ```
 
-Run the EvoSuite Logger (replace the path with your Tutorial_Stack directory path):
+Run the EvoSuite Logger (replace the path with your absolute path to the directory Tutorial_Stack):
 ```bash
 python EvosuiteLogger.py "/ABSOLUTE_PATH_TO_TUTORIAL_STACK" -class tutorial.Stack -projectCP target/classes
 ```
@@ -48,7 +48,7 @@ Navigate to the visualization scripts directory:
 cd ../../scripts/visualization
 ```
 
-Generate visualizations (replace with your logs directory path):
+Generate visualizations (replace the path with your absolute path to the directory Tutorial_Stack):
 ```bash
 python EvosuiteVisualizer.py --input_directory "/PATH_TO_TUTORIAL_STACK/LogFiles_EvoSuiteLogger"
 ```
@@ -56,4 +56,4 @@ python EvosuiteVisualizer.py --input_directory "/PATH_TO_TUTORIAL_STACK/LogFiles
 Now we obtained the visualizations. The visualizations outputs are placed in a the directory Tutorial_Stack/LogFiles_EvoSuiteLogger/visualization.
 
 Here you can see the visualizations (you might get different looking visualizations due to different seeds):
-[Insert visualization PDFs or images here]
+![Visualization Example](visualization_examples/visualization-20250106-010006-1.jpg)
