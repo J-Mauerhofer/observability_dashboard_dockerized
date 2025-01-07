@@ -98,7 +98,18 @@ def print_help():
 def main():
     # Argument parser
     parser = argparse.ArgumentParser(description="Run visualizations for EvoSuite logs.", add_help=False)
-    parser.add_argument("--input_directory", type=str, help="Absolute path to the directory containing log files.")
+    
+    # **CHANGED LINE STARTS HERE**
+    # Hardcode the input directory by setting a default value
+    HARD_CODED_INPUT_DIRECTORY = "/path/to/hardcoded/input_directory"  # <-- Replace with your desired path
+    parser.add_argument(
+        "--input_directory",
+        type=str,
+        help="Absolute path to the directory containing log files.",
+        default=r"C:\Users\Julian Seminar\Desktop\Examples for paper"
+    )
+    # **CHANGED LINE ENDS HERE**
+    
     parser.add_argument("--output_directory", type=str, help="Absolute path to the directory for saving output files. If not provided, a 'visualization' folder will be created in the input directory.")
     parser.add_argument("--output_filename", type=str, help=f"Name of the output PDF (default: {DEFAULTS['output_filename']}).")
     parser.add_argument("--plots", type=str, help=f"Comma-separated list of plots to generate or 'all' for all plots (default: {DEFAULTS['plots']}).")
