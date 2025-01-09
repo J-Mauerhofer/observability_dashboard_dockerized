@@ -18,29 +18,7 @@ class Population:
         pattern = r'{ "id":.*?} }'
         matches = re.findall(pattern, self.raw_string, re.DOTALL)
         return matches
-
-
-    """ 
-    def get_front_sizes(self):
-        #get max rank
-        max_rank = -1
-        for individual_in_population in self.individuals_in_population:
-            if individual_in_population.rank > max_rank:
-                max_rank = individual_in_population.rank
-
-        if max_rank < 0:
-            ValueError(f"Max rank < 0 in {self.iteration.iteration_number}")
-            
-        #initialize the front sizes array
-        front_sizes = np.zeros(max_rank + 1)
-        for individual_in_population in self.individuals_in_population:
-            front_sizes[individual_in_population.rank] += 1
-
-        for individual_in_population in self.individuals_in_population:
-            front_sizes[individual_in_population.rank] += 1
-
-        return front_sizes
-    """
+    
     def get_front_sizes(self):
         # get max rank
         max_rank = -1
@@ -58,4 +36,17 @@ class Population:
 
         return front_sizes
 
+    def get_average_fitness(self):
+        fitness_sum = 0
+        for individual_in_population in self.individuals_in_population:
+            fitness_sum += individual_in_population.fitness
+
+        return fitness_sum / len(self.individuals_in_population)
+    
+    def get_average_crowding_distance(self):
+        crowding_distance_sum = 0
+        for individual_in_population in self.individuals_in_population:
+            crowding_distance_sum += individual_in_population.distance
+
+        return crowding_distance_sum / len(self.individuals_in_population)
 

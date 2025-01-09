@@ -2,7 +2,7 @@ from src.DynaMOSA_Model.algorithm_execution import algorithm_execution
 import matplotlib.pyplot as plt
 
 
-class AdditionOfNewGoalsPlot:
+class NonInitialGoalsView:
     def __init__(self, algorithm_execution):
         self.algorithm_execution = algorithm_execution
 
@@ -22,7 +22,7 @@ class AdditionOfNewGoalsPlot:
 
         return y_values_per_iteration
     
-    def plot_number_of_goals_not_among_initial_goals(self, show=False):
+    def plot_number_of_goals_not_among_initial_goals(self, show=False, title_size=14):
         y_values = self.get_y_values()
         x_values = range(len(y_values))
 
@@ -35,9 +35,9 @@ class AdditionOfNewGoalsPlot:
         ax.set_ylabel('Number of goals not among the initial goals')
 
         # Add title with good spacing and formatting
-        ax.set_title('Number of Goals That Did Not Exist at Start', 
+        ax.set_title('Non-Initial Goals View', 
                     pad=20,        # Add padding above the title
-                    fontsize=14,   # Larger font size
+                    fontsize=title_size,   # Larger font size
                     fontweight='bold')  # Make it bold
         
         # Add class name as subtitle with smaller font

@@ -4,7 +4,7 @@ import numpy as np
 
 #name in paper: New Individuals view
 
-class New_Individuals_Per_Population_Plot:
+class NewIndividualsView:
 
     def __init__(self, algorithm_execution):
         self.algorithm_execution = algorithm_execution
@@ -31,7 +31,7 @@ class New_Individuals_Per_Population_Plot:
             individuals_not_present_in_last_population_for_each_population.append(individuals_not_present_in_last_population)
         return individuals_not_present_in_last_population_for_each_population
     
-    def plot_number_of_individuals_not_present_in_last_population_per_population(self, show=False):
+    def plot_number_of_individuals_not_present_in_last_population_per_population(self, show=False, title_size=14):
         population_sizes = [len(population.individuals_in_population) for population in self.populations]
 
         # Create a figure and axis
@@ -45,11 +45,21 @@ class New_Individuals_Per_Population_Plot:
         ax.set_ylabel('Number of Individuals not present in last Population')
         #ax.set_title('Number of Individuals not present in last Population per Population' + ' for ' + self.algorithm_execution.name)
 
+        # Add title with good spacing and formatting
+        ax.set_title('New Individuals View', 
+                    pad=20,        # Add padding above the title
+                    fontsize=title_size,   # Larger font size
+                    fontweight='bold')  # Make it bold
+        
+        # Add class name as subtitle with smaller font
+        ax.text(0.5, 1.02,         # Position it above the main title
+                self.algorithm_execution.name,
+                horizontalalignment='center',
+                transform=ax.transAxes,
+                fontsize=10,
+                style='italic')
+
         if show:
             plt.show()
         
         return fig
-
-
-#New_Individuals_Per_Population_Plot = New_Individuals_Per_Population_Plot(r'C:\Users\Julian Seminar\Desktop\currentLogs\logs.txt')
-#New_Individuals_Per_Population_Plot.plot_number_of_individuals_not_present_in_last_population_per_population()

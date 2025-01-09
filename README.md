@@ -39,7 +39,7 @@ The Observability Dashboard for EvoSuite is designed to enhance the transparency
 
 **EvoSuite Visualizer**: This tool processes log data obtained by the EvoSuite Logger and generates visualizations to provide insights into the runtime behavior of EvoSuite. It is particularly useful for analyzing test generation patterns and coverage progress in a convenient and easy way.
 
-**EvoSuite Logger**: Hosted on a separate GitHub repository (GitHub Link), this tool generates detailed logs during the execution of EvoSuite. While it can be run independently, this project includes a convenient script to simplify its use.
+**EvoSuite Logger**: Hosted on a separate GitHub repository ([GitHub Link](https://github.com/DominikFischli/evosuite.git)), this tool generates detailed logs during the execution of EvoSuite. While it can be run independently, this project includes a convenient script to simplify its use.
 
 These tools work together to support academic research and practical analysis, offering a comprehensive view of EvoSuite's operation and enabling users to better understand and improve its behavior. The EvoSuite Visualizer can only parse logs created by the EvoSuite Logger, so naturally, the tools are designed to first run the logger and then feed its output to the visualizer. However, the logs obtained by the logger could be repurposed for different tasks, such as integration into other coding projects.
 

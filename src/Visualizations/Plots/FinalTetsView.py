@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 #name in paper: Final tests view
 
-class FinalTestsFoundPerIterationPlot:
+class FinalTestsView:
     def __init__(self, algorithm_execution):
         self.algorithm_execution = algorithm_execution
 
@@ -28,7 +28,7 @@ class FinalTestsFoundPerIterationPlot:
                 ValueError("The location of the first occurance of the individual is not the initial Population and not an offspring population.")
         return number_of_final_tests_generated_per_iteration
     
-    def plot_number_of_final_tests_generated_per_iteration(self, show=False):
+    def plot_number_of_final_tests_generated_per_iteration(self, show=False, title_size=14):
         number_of_final_tests_generated_per_iteration = self.get_array_of_numbers_of_final_tests_generated_per_iteration()
         
         # Create a figure and axis
@@ -38,7 +38,20 @@ class FinalTestsFoundPerIterationPlot:
         ax.plot(range(-1, len(number_of_final_tests_generated_per_iteration) - 1), number_of_final_tests_generated_per_iteration)
         ax.set_xlabel('Iteration number')
         ax.set_ylabel('Number of Final Tests generated')
-        #ax.set_title('Number of Final Tests generated per Iteration' + ' for ' + self.algorithm_execution.name)
+
+        # Add title with good spacing and formatting
+        ax.set_title('Final tests view', 
+                    pad=20,        # Add padding above the title
+                    fontsize=title_size,   # Larger font size
+                    fontweight='bold')  # Make it bold
+        
+        # Add class name as subtitle with smaller font
+        ax.text(0.5, 1.02,         # Position it above the main title
+                self.algorithm_execution.name,
+                horizontalalignment='center',
+                transform=ax.transAxes,
+                fontsize=10,
+                style='italic')
 
         if show:
             plt.show()

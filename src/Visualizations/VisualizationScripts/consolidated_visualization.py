@@ -18,19 +18,7 @@ class ConsolidatedVisualization(VisualizationBase):
     """Visualization strategy that combines multiple metrics on a single page."""
 
     def process_file(self, file_path: str, selected_plots: List[str], pdf: PdfPages, timeout: int, max_workers: int) -> bool:
-        """
-        Generate consolidated visualization of multiple metrics.
-
-        Args:
-            file_path: Path to execution log file
-            selected_plots: Types of plots to generate
-            pdf: PDF document for plot storage
-            timeout: Maximum time allowed for plot generation
-            max_workers: Maximum number of concurrent workers
-
-        Returns:
-            bool: Success status of file processing
-        """
+        """Generate consolidated visualization of multiple metrics."""
         if not selected_plots:
             print("No plots selected for generation")
             return False
@@ -38,24 +26,33 @@ class ConsolidatedVisualization(VisualizationBase):
         try:
             algorithm_execution_instance = algorithm_execution(file_path)
             num_plots = len(selected_plots)
-            rows = (num_plots + 2) // 3
-            fig, axes = plt.subplots(rows, 3, figsize=(30, 10 * rows))
+            rows = (num_plots + 3) // 4  # Changed to 4 columns
+            
+            fig, axes = plt.subplots(rows, 4, figsize=(40, 8 * rows))  # Width increased for 4 columns
             
             if rows == 1:
                 axes = axes.reshape(1, -1)
-            plt.subplots_adjust(wspace=0.3, hspace=0.3)
+                
+            plt.subplots_adjust(
+                left=0.05,
+                right=0.95,
+                bottom=0.05,
+                top=0.95,
+                wspace=0.15,
+                hspace=0.2
+            )
 
             fig.suptitle(f"Analysis of {algorithm_execution_instance.name}", 
-                        fontsize=24, y=0.98, weight='bold')
+                        fontsize=35, y=0.98, weight='bold')
 
             success = True
             plot_results = queue.Queue()
 
             def create_and_queue_plot(plot_name: str, row: int, col: int) -> None:
-                """Helper function to create plot and queue results"""
                 try:
                     plot_fig = self.create_plot(plot_name, algorithm_execution_instance)
                     if plot_fig:
+                        plot_fig.tight_layout(pad=0.1)
                         plot_fig.canvas.draw()
                         img = plot_fig.canvas.buffer_rgba()
                         plot_results.put((row, col, img, None, plot_fig))
@@ -65,14 +62,12 @@ class ConsolidatedVisualization(VisualizationBase):
                     plot_results.put((row, col, None, str(e), None))
 
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
-                # Submit all plot creation tasks
                 futures = []
                 for idx, plot_name in enumerate(selected_plots):
-                    row, col = divmod(idx, 3)
+                    row, col = divmod(idx, 4)  # Changed to 4 columns
                     future = executor.submit(create_and_queue_plot, plot_name, row, col)
                     futures.append((future, plot_name, row, col))
 
-                # Wait for all tasks to complete or timeout
                 for future, plot_name, row, col in futures:
                     try:
                         future.result(timeout=timeout)
@@ -83,7 +78,6 @@ class ConsolidatedVisualization(VisualizationBase):
                         success = False
                         plot_results.put((row, col, None, f"Error generating {plot_name}: {str(e)}", None))
 
-            # Process results and update the figure
             while not plot_results.empty():
                 row, col, img, error, plot_fig = plot_results.get()
                 if img is not None:
@@ -95,15 +89,17 @@ class ConsolidatedVisualization(VisualizationBase):
                     success = False
                     axes[row, col].text(0.5, 0.5, error,
                                       ha='center', va='center',
-                                      fontsize=12, color='red')
+                                      fontsize=10, color='red')
                     axes[row, col].set_axis_off()
 
             # Hide unused subplots
-            for idx in range(len(selected_plots), rows * 3):
-                row, col = divmod(idx, 3)
+            for idx in range(len(selected_plots), rows * 4):  # Changed to 4 columns
+                row, col = divmod(idx, 4)  # Changed to 4 columns
                 axes[row, col].set_visible(False)
 
-            pdf.savefig(fig)
+            fig.tight_layout(rect=[0.05, 0.05, 0.95, 0.95])
+            
+            pdf.savefig(fig, bbox_inches='tight', pad_inches=0.1)
             plt.close(fig)
             return success
 

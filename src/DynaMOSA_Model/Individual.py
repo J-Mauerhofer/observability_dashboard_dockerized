@@ -24,13 +24,7 @@ class Individual:
 
         #list of the occurances in the final test suite
         self.occurancesInFinalTestSuite = []
-
-
-
-        #information specific to iterations
-        #self.rank = 
-        #self.fitness =  
-        #self.distance = 
+ 
     def add_specific_information_to_individual_to_corresponding_list(self, specific_information_to_individual):
         #add the specific_information_to_individual object to the corresponding list in the individual object
         #check if the specific_information_to_individual object is an instance of a specific class

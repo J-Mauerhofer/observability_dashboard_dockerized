@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 #name in paper: New goals view
 
-class NewGoalsPerIterationPlot:
+class NewCurrentGoalsView:
 
     def __init__(self, algorithm_execution):
         self.algorithm_execution = algorithm_execution
@@ -27,7 +27,7 @@ class NewGoalsPerIterationPlot:
         return new_goals_per_iteration
     
 
-    def plot_number_of_new_goals_per_iteration(self, show=False):
+    def plot_number_of_new_goals_per_iteration(self, show=False, title_size=14):
         iteration_numbers = [iteration.iteration_number for iteration in self.iterations]
         # Remove the first iteration because there are no new goals in the first iteration
         iteration_numbers = iteration_numbers[1:]
@@ -39,7 +39,20 @@ class NewGoalsPerIterationPlot:
         ax.plot(iteration_numbers, number_of_new_goals_per_iteration)
         ax.set_xlabel('Iteration number')
         ax.set_ylabel('Number of New Current Goals')
-        #ax.set_title('Number of New Goals per Iteration' + ' for ' + self.algorithm_execution.name)
+
+        # Add title with good spacing and formatting
+        ax.set_title('New current goals view', 
+                    pad=20,        # Add padding above the title
+                    fontsize=title_size,   # Larger font size
+                    fontweight='bold')  # Make it bold
+        
+        # Add class name as subtitle with smaller font
+        ax.text(0.5, 1.02,         # Position it above the main title
+                self.algorithm_execution.name,
+                horizontalalignment='center',
+                transform=ax.transAxes,
+                fontsize=10,
+                style='italic')
 
         if show:
             plt.show()

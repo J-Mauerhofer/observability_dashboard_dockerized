@@ -19,3 +19,17 @@ class InitialPopulation:
         pattern = r'{ "id":.*?}\n}'
         matches = re.findall(pattern, self.raw_string, re.DOTALL)
         return matches
+
+    def get_average_fitness(self):
+        fitness_sum = 0
+        for individual_in_initial_population in self.individuals_in_initial_population:
+            fitness_sum += individual_in_initial_population.fitness
+
+        return fitness_sum / len(self.individuals_in_initial_population)
+    
+    def get_average_crowding_distance(self):
+        crowding_distance_sum = 0
+        for individual_in_initial_population in self.individuals_in_initial_population:
+            crowding_distance_sum += individual_in_initial_population.distance
+
+        return crowding_distance_sum / len(self.individuals_in_initial_population)

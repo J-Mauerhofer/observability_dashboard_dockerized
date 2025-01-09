@@ -5,7 +5,7 @@ from src.DynaMOSA_Model.OffspringPopulation import OffspringPopulation
 from src.DynaMOSA_Model.Goal import Goal
 
 class Iteration:
-    def __init__(self, raw_string, algorithm_execution):
+    def __init__(self, raw_string, algorithm_execution, verbose=False):
         #set instance variables to the values given in the parameters
         self.raw_string = raw_string
         self.algorithm_execution = algorithm_execution
@@ -13,9 +13,9 @@ class Iteration:
         #set the instance variables to the values extracted from the raw string
         self.iteration_number = self.extract_iteration_number()
 
-        self.current_goals = self.extract_current_goals()
-        self.covered_goals = self.extract_covered_goals()
-        self.uncovered_goals = self.extract_uncovered_goals()
+        self.current_goals = self.extract_current_goals(verbose=verbose)
+        self.covered_goals = self.extract_covered_goals(verbose=verbose)
+        self.uncovered_goals = self.extract_uncovered_goals(verbose=verbose)
         
         self.number_of_uncovered_goals, self.number_of_covered_goals = self.extract_number_of_covered_and_uncovered_goals()
 
@@ -91,7 +91,7 @@ class Iteration:
 
 
 
-    def extract_current_goals(self):
+    def extract_current_goals(self, verbose=False):
         # Regex pattern to capture the current goals section
         pattern = r'"current targets": (\[ \[.*?\n\]\})'
 
@@ -115,7 +115,8 @@ class Iteration:
                 # Check if the ValueError message matches the custom one
                 if "No goal found among all goals in the register of all goals" in str(e):
                     # Instantiate a new goal object if it's the custom ValueError
-                    print(f"Custom ValueError caught: {e}")
+                    if verbose:
+                        print(f"Custom ValueError caught: {e}")
                     # Create the new goal object and add it to the list of all goals in the algorithm execution
                     goal = Goal(goal_string, True, self.iteration_number)
                     self.algorithm_execution.goals.append(goal)
@@ -131,7 +132,7 @@ class Iteration:
             raise ValueError(f"No match found for current goals in iteration {self.iteration_number}")
 
 
-    def extract_covered_goals(self):
+    def extract_covered_goals(self, verbose=False):
         # Regex pattern to capture the covered goals section
         pattern = r'"covered targets":\s*\[\s*(.*?)\s*\],\s*"current targets":'
 
@@ -155,7 +156,8 @@ class Iteration:
                 # Check if the ValueError message matches the custom one
                 if "No goal found among all goals in the register of all goals" in str(e):
                     # Instantiate a new goal object if it's the custom ValueError
-                    print(f"Custom ValueError caught: {e}")
+                    if verbose:
+                        print(f"Custom ValueError caught: {e}")
                     #create the new goal object and add it to the list of all goals in the algorithm execution
                     goal = Goal(goal_string, True, self.iteration_number)
                     self.algorithm_execution.goals.append(goal)
@@ -170,7 +172,7 @@ class Iteration:
         else:
             raise ValueError(f"No match found for covered goals in iteration {self.iteration_number}")
 
-    def extract_uncovered_goals(self):
+    def extract_uncovered_goals(self, verbose=False):
         # Regex pattern to capture the uncovered goals section
         pattern = r'"uncovered targets":\s*\[\s*(.*?)\s*\],\s*"covered targets":'
 
@@ -194,7 +196,8 @@ class Iteration:
                 # Check if the ValueError message matches the custom one
                 if "No goal found among all goals in the register of all goals" in str(e):
                     # Instantiate a new goal object if it's the custom ValueError
-                    print(f"Custom ValueError caught: {e}")
+                    if verbose:
+                        print(f"Custom ValueError caught: {e}")
                     # Create the new goal object and add it to the list of all goals in the algorithm execution
                     goal = Goal(goal_string, True, self.iteration_number)
                     self.algorithm_execution.goals.append(goal)
@@ -257,3 +260,9 @@ class Iteration:
         else:
             # If no offspring population data is found, raise an exception
             raise ValueError(f"No offspring population section found in iteration {self.iteration_number}")
+        
+    def get_average_fitness(self):
+        return self.population.get_average_fitness()
+    
+    def get_average_crowding_distance(self):
+        return self.population.get_average_crowding_distance()
