@@ -140,7 +140,7 @@ The visualizations have now been successfully generated! They can be found in th
 
 Below is an example of the visualizations you can expect (please note that your results may vary depending on the seed used):
 
-![Visualization Example](visualization_examples/visualization-20250106-010006-1.jpg)
+![Visualization Example](visualization-20250111-012255-1.jpg)
 
 By leveraging Docker, this setup ensures a consistent and dependency-free environment across all systems, simplifying the process and enhancing reliability.
 
