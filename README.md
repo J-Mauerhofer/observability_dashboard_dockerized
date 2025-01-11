@@ -237,13 +237,13 @@ docker run -it -v "absolute/path/to/logs:/app/logs" [docker-image] python3 scrip
 
 **Custom Output Filename**:
 ```bash
-docker run -it -v "absolute/path/to/logs:/app/logs" -v "/path/to/results:/app/results" [docker-image] python3 scripts/visualization/EvosuiteVisualizer.py --input_directory /app/logs --output_filename "custom_visualization.pdf"
+docker run -it -v "absolute/path/to/logs:/app/logs" [docker-image] python3 scripts/visualization/EvosuiteVisualizer.py --input_directory /app/logs --output_filename "custom_visualization.pdf"
 ```
 
 **With Custom Configuration File**:
 
 ```bash
-docker run -it -v "absolute/path/to/logs:/app/logs" -v "/path/to/results:/app/results" -v "/path/to/config:/app/config" [docker-image] python3 scripts/visualization/EvosuiteVisualizer.py --input_directory "/app/logs" --config_file "/absolute/path/to/custom_config.json"
+docker run -it -v "absolute/path/to/logs:/app/logs" -v "/path/to/config:/app/config" [docker-image] python3 scripts/visualization/EvosuiteVisualizer.py --input_directory "/app/logs" --config_file "/absolute/path/to/custom_config.json"
 ```
 
 
