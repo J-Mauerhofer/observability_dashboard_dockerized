@@ -258,12 +258,18 @@ docker run [docker-flags] [docker-image] [command]
 
 The script allows users to specify program parameters via command-line arguments. If not provided, it will attempt to retrieve these from a configuration file. If neither an argument nor a configuration file is available, the script uses default settings.
 
-Parameters:
---projectRoot: Absolute path to the root directory of the Java project.
---locations: Specify class directories and the classes they contain
---parameters: Additional EvoSuite parameters (e.g., -criterion branch, -Dsearch_budget=60).
---config: Path to a JSON configuration file (optional; use "default" for the predefined file).
---parallel: Enable parallel processing with an optional number of processes (e.g., --parallel 4).
+#### Parameters:
+
+* **--projectRoot**: Absolute path to the root directory of the Java project.
+
+* **--locations**: Specify class directories and the classes they contain.
+
+* **--parameters**: Additional EvoSuite parameters (e.g., -criterion branch, -Dsearch_budget=60).
+
+* **--config**: Path to a JSON configuration file (optional; use "default" for the predefined file).
+
+* **--parallel**: Enable parallel processing with an optional number of processes (e.g., --parallel 4).
+
 Example Commands:
 Using Direct Command-Line Arguments:
 
