@@ -243,15 +243,41 @@ docker run -it -v "absolute/path/to/logs:/app/logs" [docker-image] python3 scrip
 **With Custom Configuration File**:
 
 ```bash
-docker run -it -v "absolute/path/to/logs:/app/logs" -v "/path/to/config:/app/config" [docker-image] python3 scripts/visualization/EvosuiteVisualizer.py --input_directory "/app/logs" --config_file "/absolute/path/to/custom_config.json"
+docker run -it -v "absolute/path/to/logs:/app/logs" -v "/path/to/config:/app/config" [docker-image] python3 scripts/visualization/EvosuiteVisualizer.py --input_directory "/app/logs" --config "/absolute/path/to/custom_config.json"
 ```
 
 
+### EvoSuite Logger Usage
 
+To use the EvoSuite Logger, execute the `EvosuiteLogger.py` script with the required parameters using the Docker image. The tool supports both direct command-line arguments and JSON configuration files for flexibility.
 
-### Log Generation Tool Usage
+The general command pattern for running the `EvosuiteLogger.py` script with Docker is:
+```bash
+docker run [docker-flags] [docker-image] [command]
+The script allows users to specify program parameters via command-line arguments. If not provided, it will attempt to retrieve these from a configuration file. If neither an argument nor a configuration file is available, the script uses default settings.
 
-[PLACEHOLDER: Provide step-by-step instructions for using the log generation tool. Include example commands, explain any required inputs, and describe the output logs.]
+Parameters:
+--projectRoot: Absolute path to the root directory of the Java project.
+--locations: Specify class directories and the classes they contain
+--parameters: Additional EvoSuite parameters (e.g., -criterion branch, -Dsearch_budget=60).
+--config: Path to a JSON configuration file (optional; use "default" for the predefined file).
+--parallel: Enable parallel processing with an optional number of processes (e.g., --parallel 4).
+Example Commands:
+Using Direct Command-Line Arguments:
+
+bash
+Code kopieren
+docker run -it -v "absolute/path/to/project:/app/project" [docker-image] python3 scripts/log_generation/EvosuiteLogger.py --projectRoot "/app/project" --locations '{"path": "target/classes", "classes": ["tutorial.Stack"]}' --parameters '-criterion branch -Dsearch_budget=60'
+Using a Configuration File:
+
+bash
+Code kopieren
+docker run -it -v "absolute/path/to/project:/app/project" -v "absolute/path/to/config:/app/config" [docker-image] python3 scripts/log_generation/EvosuiteLogger.py --config "/app/config/logging_config.json"
+Enabling Parallel Processing:
+
+bash
+Code kopieren
+docker run -it -v "absolute/path/to/project:/app/project" [docker-image] python3 scripts/log_generation/EvosuiteLogger.py --projectRoot "/app/project" --locations '{"path": "target/classes", "classes": ["tutorial.Stack", "tutorial.Queue"]}' --parameters '-criterion branch' --parallel 4
 
 ## Configuration
 
@@ -274,27 +300,16 @@ Users can also create additional configuration files. For this, they just need t
 --config "/path/to/custom_config.json"
 ```
 
-### Configuration for Log Generation Tool
+An example of a log file for the EvoSuite Visualizer can be seen in this repository in scripts/visualization/visualization_config
+
+### Configuration for EvoSuite Logger
 
 [PLACEHOLDER: Explain the purpose of the configuration file for the log generation tool. Describe its default location and parameters, and provide examples of how users can modify it.]
 
-## Examples
+## Additional Example
 
-### Generating Visualizations
+**Custom Example**: Generate all available visualizations from a log directory:
 
-**Basic Example**: Generate all available visualizations from a log directory:
-```bash
-python run_visualizations.py --input_directory /path/to/logs --output_directory /path/to/results
-```
-
-**Custom Example**: Generate specific visualizations with a custom output filename:
-```bash
-python run_visualizations.py --input_directory /path/to/logs --plots new_individuals,final_tests --output_filename analysis.pdf
-```
-
-### Creating Log Files
-
-[PLACEHOLDER: Walk through a concrete example of generating log files using the log generation tool. Include a realistic example command, describe the input, and show the resulting log file.]
 
 ## Output
 
