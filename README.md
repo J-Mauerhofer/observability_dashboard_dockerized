@@ -232,18 +232,18 @@ The EvosuiteVisualizer.py script requires parameters, listed below, to be select
 
 **Basic Command**:
 ```bash
-docker run -v "/path/to/logs:/app/logs" -v "/path/to/results:/app/results" [docker-image] python run_visualizations.py --input_directory "/app/logs" --strategy "sequential"
+docker run -it -v "absolute/path/to/logs:/app/logs" [docker-image] python run_visualizations.py --input_directory "/app/logs" --strategy "sequential"
 ```
 
 **Custom Output Filename**:
 ```bash
-docker run -v "/path/to/logs:/app/logs" -v "/path/to/results:/app/results" [docker-image] python run_visualizations.py --input_directory /app/logs --output_filename "custom_visualization.pdf"
+docker run -it -v "absolute/path/to/logs:/app/logs" -v "/path/to/results:/app/results" [docker-image] python run_visualizations.py --input_directory /app/logs --output_filename "custom_visualization.pdf"
 ```
 
 **With Custom Configuration File**:
 
 ```bash
-docker run -v "/path/to/logs:/app/logs" -v "/path/to/results:/app/results" -v "/path/to/config:/app/config" [docker-image] python run_visualizations.py --input_directory "/app/logs" --config_file "/absolute/path/to/custom_config.json"
+docker run -it -v "absolute/path/to/logs:/app/logs" -v "/path/to/results:/app/results" -v "/path/to/config:/app/config" [docker-image] python run_visualizations.py --input_directory "/app/logs" --config_file "/absolute/path/to/custom_config.json"
 ```
 
 
