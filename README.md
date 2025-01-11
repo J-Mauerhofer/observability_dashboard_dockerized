@@ -96,6 +96,9 @@ Copy and paste the following link into your web browser's address bar to downloa
 http://evosuite.org/files/tutorial/Tutorial_Stack.zip
 ```
 
+Make sure to place it in the same directory as the `observability_dashboard_dockerized`
+
+
 #### 4. Compile the Tutorial Stack Project
 
 Navigate back to the base directory of `observability_dashboard_dockerized` and compile the Tutorial Stack project using Docker:
