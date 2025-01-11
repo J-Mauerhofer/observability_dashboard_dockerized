@@ -184,31 +184,31 @@ The EvoSuite Visualizer processes log files generated during the EvoSuite test g
 
 ### Prerequisites
 
-#### Prerequisites for EvoSuite Visualizer
-
-[PLACEHOLDER: List the system requirements and dependencies needed to run the visualization tool. Mention specific versions of Python or libraries, if applicable.]
-
-#### Prerequisites for EvoSuite Logger
-
-[PLACEHOLDER: List the system requirements and dependencies needed to run the log generation tool. Mention any unique dependencies or requirements for this tool.]
+Both tools require Docker to be installed. For the EvoSuite Logger, the ability to compile Java projects is necessary. The provided Docker image already includes Maven, offering a convenient option for users. No additional setup is required.
 
 ### Setup
 
-#### Setup for EvoSuite Visualizer
+Setting up the EvoSuite Visualizer is straightforward: 
 
-The EvoSuite Visualizer is ready to use immediately after cloning the GitHub repository. To use it, simply run the run_visualizations.py script and pass it paramters or use alternative methods of communicating with the script as described in the usage section. 
+1. Install Docker Desktop.  
+2. Install Maven or an other program to compile Java projects if you plan to use the EvoSuite Logger.  
+3. Clone this repository.  
+4. Build the Docker image.  
 
-#### Setup for EvoSuite Logger
-
-[PLACEHOLDER: Provide step-by-step instructions for setting up the log generation tool. Include any additional setup steps specific to this tool.]
+With these steps, the installation is complete.
 
 ## Usage
 
 ### EvoSuite Visualizer Usage
 
-To use the visualization tool, run the run_visualizations.py script with the required parameters.
+To use the visualization tool, execute the `EvoSuiteVisualizer.py` script with the required parameters using the Docker image. The tool provides real-time progress updates, so we recommend using the `-it` flag for the Docker container.
 
-The script requires parameters, listed below, to be select ed before each execution. If a parameter is passed as a command-line argument, it will take precedence. If it is not provided in the command line, the script checks if a configuration file is specified and tries to retrieve the parameter from there. If neither an argument nor a configuration file entry is available, the script falls back to hardcoded default values. This approach ensures maximum ease of use and flexibility.
+The general pattern for running the `EvoSuiteVisualizer.py` script with Docker is:  
+`docker run [docker-flags] [docker-image] [command]`
+
+Examples of how to run these commands are provided below.
+
+The EvosuiteVisualizer.py script requires parameters, listed below, to be select ed before each execution. If a parameter is passed as a command-line argument, it will take precedence. If it is not provided in the command line, the script checks if a configuration file is specified and tries to retrieve the parameter from there. If neither an argument nor a configuration file entry is available, the script falls back to hardcoded default values. This approach ensures maximum ease of use and flexibility.
 
 #### Parameters:
 
@@ -232,13 +232,22 @@ The script requires parameters, listed below, to be select ed before each execut
 
 **Basic Command**:
 ```bash
-python run_visualizations.py --input_directory /path/to/logs --output_directory /path/to/results
+docker run -v "/path/to/logs:/app/logs" -v "/path/to/results:/app/results" [docker-image] python run_visualizations.py --input_directory "/app/logs" --strategy "sequential"
 ```
 
 **Custom Output Filename**:
 ```bash
-python run_visualizations.py --input_directory /path/to/logs --output_filename custom_visualization.pdf
+docker run -v "/path/to/logs:/app/logs" -v "/path/to/results:/app/results" [docker-image] python run_visualizations.py --input_directory /app/logs --output_filename "custom_visualization.pdf"
 ```
+
+**With Custom Configuration File**:
+
+```bash
+docker run -v "/path/to/logs:/app/logs" -v "/path/to/results:/app/results" -v "/path/to/config:/app/config" [docker-image] python run_visualizations.py --input_directory "/app/logs" --config_file "/absolute/path/to/custom_config.json"
+```
+
+
+
 
 ### Log Generation Tool Usage
 
@@ -256,13 +265,13 @@ It is intended that users can edit the contents of the default configuration fil
 
 if users would like to use the default configuration file, they need to pass "default" to the --config parameter like this:
 ```bash
-python run_visualizations.py --config default
+--config "default"
 ```
 
 Users can also create additional configuration files. For this, they just need to create a new JSON file and specify its path with the --config option:
 
 ```bash
-python run_visualizations.py --config /path/to/custom_config.json
+--config "/path/to/custom_config.json"
 ```
 
 ### Configuration for Log Generation Tool
