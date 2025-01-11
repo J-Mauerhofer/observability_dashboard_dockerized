@@ -90,7 +90,11 @@ unzip Tutorial_Stack.zip
 
 ##### For Windows:
 
-Download the project from [this link](http://evosuite.org/files/tutorial/Tutorial_Stack.zip) and unzip it manually.
+Copy and paste the following link into your web browser's address bar to download the project:
+
+```
+http://evosuite.org/files/tutorial/Tutorial_Stack.zip
+```
 
 #### 4. Compile the Tutorial Stack Project
 
