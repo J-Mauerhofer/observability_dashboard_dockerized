@@ -37,9 +37,9 @@
 
 The Observability Dashboard for EvoSuite is designed to enhance the transparency of EvoSuite's test generation process through two distinct tools:
 
-**EvoSuite Visualizer**: This tool processes log data obtained by the EvoSuite Logger and generates visualizations to provide insights into the runtime behavior of EvoSuite. It is particularly useful for analyzing test generation patterns and coverage progress in a convenient and easy way.
+**EvoSuite Logger**: This tool, with its source code hosted in a separate ([GitHub Link](https://github.com/DominikFischli/evosuite.git)), generates detailed logs during EvoSuite executions. While it can be used independently, this project provides a convenient script and its .jar file, eliminating the need for users to access the separate repository hosting its source code.
 
-**EvoSuite Logger**: Hosted on a separate GitHub repository ([GitHub Link](https://github.com/DominikFischli/evosuite.git)), this tool generates detailed logs during the execution of EvoSuite. While it can be run independently, this project includes a convenient script to simplify its use.
+**EvoSuite Visualizer**: This tool processes log data obtained by the EvoSuite Logger and generates visualizations to provide insights into the runtime behavior of EvoSuite. It is particularly useful for analyzing test generation patterns and coverage progress in a convenient and easy way.
 
 These tools work together to support academic research and practical analysis, offering a comprehensive view of EvoSuite's operation and enabling users to better understand and improve its behavior. The EvoSuite Visualizer can only parse logs created by the EvoSuite Logger, so naturally, the tools are designed to first run the logger and then feed its output to the visualizer. However, the logs obtained by the logger could be repurposed for different tasks, such as integration into other coding projects.
 
@@ -150,7 +150,7 @@ By leveraging Docker, this setup ensures a consistent and dependency-free enviro
 
 ### Evosuite Visualizer
 
-The EvoSuite Visualizer processes log files generated during the EvoSuite testing process and creates insightful visualizations. Key features include:
+The EvoSuite Visualizer processes log files generated during the EvoSuite test generation process and creates insightful visualizations. Key features include:
 
 * Support for a wide variety of visualization types, offering comprehensive insights into the test generation process.
 
@@ -168,9 +168,9 @@ The EvoSuite Visualizer processes log files generated during the EvoSuite testin
 
 ### scripts
 
-**visualization**: Contains the visualization tool script (run_visualizations.py). This script serves as the entry point to the EvoSuite Visualizer, allowing users to generate visualizations from log files. A default configuration file (visualization_config.json) is provided for convenience and can be edited to customize the tool's behavior.
+**log_generation**: Contains the EvoSuite Logger script (EvosuiteLogger.py). This folder also includes a default configuration file (logging_config.json) to streamline setup and customization.
 
-**log_generation**: Contains the EvoSuite Logger script (create_logs.py). This folder also includes a default configuration file (logging_config.json) to streamline setup and customization.
+**visualization**: Contains the visualization tool script (EvosuiteVisualizer.py). This script serves as the entry point to the EvoSuite Visualizer, allowing users to generate visualizations from log files. A default configuration file (visualization_config.json) is provided for convenience and can be edited to customize the tool's behavior.
 
 ### src
 
