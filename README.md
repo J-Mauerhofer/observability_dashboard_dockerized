@@ -254,6 +254,8 @@ To use the EvoSuite Logger, execute the `EvosuiteLogger.py` script with the requ
 The general command pattern for running the `EvosuiteLogger.py` script with Docker is:
 ```bash
 docker run [docker-flags] [docker-image] [command]
+```
+
 The script allows users to specify program parameters via command-line arguments. If not provided, it will attempt to retrieve these from a configuration file. If neither an argument nor a configuration file is available, the script uses default settings.
 
 Parameters:
