@@ -75,6 +75,12 @@ This command creates a Docker image named `evosuite-tool`.
 
 The Tutorial Stack project is required for the demo. Follow these steps to download it:
 
+Navigate up one directory:
+
+```bash
+cd ..
+```
+
 ##### For macOS and Linux:
 
 ```bash
@@ -91,6 +97,7 @@ Download the project from [this link](http://evosuite.org/files/tutorial/Tutoria
 Navigate back to the base directory of `observability_dashboard_dockerized` and compile the Tutorial Stack project using Docker:
 
 ```bash
+cd observability_dashboard_dockerized
 docker run -v "$(pwd)/Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
 ```
 
