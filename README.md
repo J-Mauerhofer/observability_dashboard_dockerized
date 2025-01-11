@@ -273,19 +273,20 @@ The script allows users to specify program parameters via command-line arguments
 Example Commands:
 Using Direct Command-Line Arguments:
 
-bash
-Code kopieren
+```bash
 docker run -it -v "absolute/path/to/project:/app/project" [docker-image] python3 scripts/log_generation/EvosuiteLogger.py --projectRoot "/app/project" --locations '{"path": "target/classes", "classes": ["tutorial.Stack"]}' --parameters '-criterion branch -Dsearch_budget=60'
-Using a Configuration File:
+```
 
-bash
-Code kopieren
+Using a Configuration File:
+```bash
 docker run -it -v "absolute/path/to/project:/app/project" -v "absolute/path/to/config:/app/config" [docker-image] python3 scripts/log_generation/EvosuiteLogger.py --config "/app/config/logging_config.json"
+```
+
 Enabling Parallel Processing:
 
-bash
-Code kopieren
+```bash
 docker run -it -v "absolute/path/to/project:/app/project" [docker-image] python3 scripts/log_generation/EvosuiteLogger.py --projectRoot "/app/project" --locations '{"path": "target/classes", "classes": ["tutorial.Stack", "tutorial.Queue"]}' --parameters '-criterion branch' --parallel 4
+```
 
 ## Configuration
 
