@@ -44,65 +44,92 @@ The Observability Dashboard for EvoSuite is designed to enhance the transparency
 These tools work together to support academic research and practical analysis, offering a comprehensive view of EvoSuite's operation and enabling users to better understand and improve its behavior. The EvoSuite Visualizer can only parse logs created by the EvoSuite Logger, so naturally, the tools are designed to first run the logger and then feed its output to the visualizer. However, the logs obtained by the logger could be repurposed for different tasks, such as integration into other coding projects.
 
 
-# Quick Start Demo
+## Quick Start Demo
 
-## Prerequisites
+### Prerequisites
 
-Before running the demo, ensure you have the following installed:
+To run the demo, ensure Docker is installed on your system. All other dependencies, including Java, Maven, Python, and necessary libraries, are managed within the Docker environment.
 
-* Java 8 JDK
-* Apache Maven 3.1 or higher
-* Python (recent version)
-* Python packages:
-  * matplotlib
-  * numpy
+### Running the Demo
 
-## Running the Demo
+#### 1. Clone the GitHub Repository
 
-### 1. Set Up the Tutorial Stack Class
+Start by cloning the repository. Open your terminal and execute the following commands:
 
-Open your terminal and execute the following commands:
+```bash
+git clone https://github.com/J-Mauerhofer/observability_dashboard_dockerized.git
+cd observability_dashboard_dockerized
+```
+
+#### 2. Build the Docker Image
+
+Build the Docker image using the provided `Dockerfile`:
+
+```bash
+docker build -t evosuite-tool .
+```
+
+This command creates a Docker image named `evosuite-tool`.
+
+#### 3. Obtain the Tutorial Stack Project
+
+The Tutorial Stack project is required for the demo. Follow these steps to download it:
+
+##### For macOS and Linux:
 
 ```bash
 wget http://evosuite.org/files/tutorial/Tutorial_Stack.zip
 unzip Tutorial_Stack.zip
-cd Tutorial_Stack
-mvn compile
 ```
 
-### 2. Generate Log Files
+##### For Windows:
 
-Open the root directory of this project in a terminal.
+Download the project from [this link](http://evosuite.org/files/tutorial/Tutorial_Stack.zip) and unzip it manually.
 
-Navigate to the log generation scripts directory:
+#### 4. Compile the Tutorial Stack Project
+
+Navigate back to the base directory of `observability_dashboard_dockerized` and compile the Tutorial Stack project using Docker:
 
 ```bash
-cd scripts/log_generation
+docker run -v "$(pwd)/Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
 ```
 
-Run the EvoSuite Logger (replace the path with your absolute path to the directory Tutorial_Stack):
+#### 5. Execute the Program
+
+With the setup complete, use the examples below to run the observability dashboard for EvoSuite. Replace placeholder paths with your own absolute paths where necessary.
+
+**Example 1: Generate Log Files**
+
+To generate log files, execute the following command:
+
 ```bash
-python EvosuiteLogger.py "/ABSOLUTE_PATH_TO_TUTORIAL_STACK" -class tutorial.Stack -projectCP target/classes
+docker run --rm -it -v "ABSOLUTE_PATH_TO_TUTORIAL_STACK_PROJECT_BASE_DIRECTORY:/mnt/project-base-dir" evosuite-tool python3 scripts/log_generation/EvosuiteLogger.py "/mnt/project-base-dir" -class tutorial.Stack -projectCP target/classes -Dsearch_budget=60
 ```
 
-The log file will be generated in Tutorial_Stack/LogFiles_EvoSuiteLogger as logstutorial_Stack.txt.
+This command mounts the specified path into the container and runs the `EvosuiteLogger.py` script to generate log files. Replace `ABSOLUTE_PATH_TO_TUTORIAL_STACK_PROJECT_BASE_DIRECTORY` with the absolute path to your `Tutorial_Stack` directory.
+The process should take exactly 60 seconds.
 
-### 3. Create Visualizations
+**Example 2: Generate Visualizations**
 
-Navigate to the visualization scripts directory:
+To generate visualizations, specify the absolute path to the directory containing the log files (e.g., `Tutorial_Stack/LogFiles_EvoSuiteLogger`) and run the following command:
+
 ```bash
-cd ../../scripts/visualization
+docker run --rm -it -v "ABSOLUTE_PATH_TO_LOG_FILES_DIRECTORY:/mnt/log-files-dir" evosuite-tool python3 scripts/visualization/EvosuiteVisualizer.py --input_directory "/mnt/log-files-dir"
 ```
 
-Generate visualizations (replace the path with your absolute path to the directory Tutorial_Stack):
-```bash
-python EvosuiteVisualizer.py --input_directory "/PATH_TO_TUTORIAL_STACK/LogFiles_EvoSuiteLogger"
-```
+This command mounts the log files directory into the container and runs the `EvosuiteVisualizer.py` script to create visualizations. Replace `ABSOLUTE_PATH_TO_LOG_FILES_DIRECTORY` with the correct path to your log files directory.
+This process should take no more than 2 minutes.
 
-Now we obtained the visualizations. The visualizations outputs are placed in a the directory Tutorial_Stack/LogFiles_EvoSuiteLogger/visualization.
+---
 
-Here you can see the visualizations (you might get different looking visualizations due to different seeds):
+The visualizations have now been successfully generated! They can be found in the directory `\LogFiles_EvoSuiteLogger\visualization` within the Tutorial Stack project directory.
+
+Below is an example of the visualizations you can expect (please note that your results may vary depending on the seed used):
+
 ![Visualization Example](visualization_examples/visualization-20250106-010006-1.jpg)
+
+By leveraging Docker, this setup ensures a consistent and dependency-free environment across all systems, simplifying the process and enhancing reliability.
+
 
 
 ## Features
@@ -258,4 +285,4 @@ The visualizations are saved as PDF files in the specified output directory.
 
 ## Acknowledgments
 
-The Observability Toolsuite for EvoSuite was developed by both Dominik Fischli and Julian Mauerhofer.
+The Observability Toolsuite for EvoSuite was developed by both Dominik Fischli and Julian Mauerhofer
