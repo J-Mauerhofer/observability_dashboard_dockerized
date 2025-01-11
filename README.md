@@ -105,8 +105,7 @@ Navigate back to the base directory of `observability_dashboard_dockerized` and 
 
 ```bash
 cd observability_dashboard_dockerized
-docker run -v "$(pwd)/../Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
-```
+docker run -v "$(pwd)/../Tutorial_Stack/Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile```
 
 #### 5. Execute the Program
 
