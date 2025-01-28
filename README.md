@@ -37,9 +37,9 @@
 
 The Observability Dashboard for EvoSuite is designed to enhance the transparency of EvoSuite's test generation process through two distinct tools:
 
-**EvoSuite Visualizer**: This tool processes log data obtained by the EvoSuite Logger and generates visualizations to provide insights into the runtime behavior of EvoSuite. It is particularly useful for analyzing test generation patterns and coverage progress in a convenient and easy way.
+**EvoSuite Logger**: This tool, with its source code hosted in a separate ([GitHub Link](https://github.com/DominikFischli/evosuite.git)), generates detailed logs during EvoSuite executions. While it can be used independently, this project provides a convenient script and its .jar file, eliminating the need for users to access the separate repository hosting its source code.
 
-**EvoSuite Logger**: Hosted on a separate GitHub repository ([GitHub Link](https://github.com/DominikFischli/evosuite.git)), this tool generates detailed logs during the execution of EvoSuite. While it can be run independently, this project includes a convenient script to simplify its use.
+**EvoSuite Visualizer**: This tool processes log data obtained by the EvoSuite Logger and generates visualizations to provide insights into the runtime behavior of EvoSuite. It is particularly useful for analyzing test generation patterns and coverage progress in a convenient and easy way.
 
 These tools work together to support academic research and practical analysis, offering a comprehensive view of EvoSuite's operation and enabling users to better understand and improve its behavior. The EvoSuite Visualizer can only parse logs created by the EvoSuite Logger, so naturally, the tools are designed to first run the logger and then feed its output to the visualizer. However, the logs obtained by the logger could be repurposed for different tasks, such as integration into other coding projects.
 
@@ -75,6 +75,12 @@ This command creates a Docker image named `evosuite-tool`.
 
 The Tutorial Stack project is required for the demo. Follow these steps to download it:
 
+Navigate up one directory:
+
+```bash
+cd ..
+```
+
 ##### For macOS and Linux:
 
 ```bash
@@ -84,14 +90,22 @@ unzip Tutorial_Stack.zip
 
 ##### For Windows:
 
-Download the project from [this link](http://evosuite.org/files/tutorial/Tutorial_Stack.zip) and unzip it manually.
+Copy and paste the following link into your web browser's address bar to download the project:
+
+```
+http://evosuite.org/files/tutorial/Tutorial_Stack.zip
+```
+
+Make sure to place it in the same directory as the `observability_dashboard_dockerized`
+
 
 #### 4. Compile the Tutorial Stack Project
 
 Navigate back to the base directory of `observability_dashboard_dockerized` and compile the Tutorial Stack project using Docker:
 
 ```bash
-docker run -v "$(pwd)/Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
+cd observability_dashboard_dockerized
+docker run -v "$(pwd)/../Tutorial_Stack/Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
 ```
 
 #### 5. Execute the Program
@@ -126,7 +140,7 @@ The visualizations have now been successfully generated! They can be found in th
 
 Below is an example of the visualizations you can expect (please note that your results may vary depending on the seed used):
 
-![Visualization Example](visualization_examples/visualization-20250106-010006-1.jpg)
+![Visualization Example](visualization_examples/visualization-20250111-012255-1.jpg)
 
 By leveraging Docker, this setup ensures a consistent and dependency-free environment across all systems, simplifying the process and enhancing reliability.
 
@@ -136,7 +150,7 @@ By leveraging Docker, this setup ensures a consistent and dependency-free enviro
 
 ### Evosuite Visualizer
 
-The EvoSuite Visualizer processes log files generated during the EvoSuite testing process and creates insightful visualizations. Key features include:
+The EvoSuite Visualizer processes log files generated during the EvoSuite test generation process and creates insightful visualizations. Key features include:
 
 * Support for a wide variety of visualization types, offering comprehensive insights into the test generation process.
 
@@ -154,9 +168,9 @@ The EvoSuite Visualizer processes log files generated during the EvoSuite testin
 
 ### scripts
 
-**visualization**: Contains the visualization tool script (run_visualizations.py). This script serves as the entry point to the EvoSuite Visualizer, allowing users to generate visualizations from log files. A default configuration file (visualization_config.json) is provided for convenience and can be edited to customize the tool's behavior.
+**log_generation**: Contains the EvoSuite Logger script (EvosuiteLogger.py). This folder also includes a default configuration file (logging_config.json) to streamline setup and customization.
 
-**log_generation**: Contains the EvoSuite Logger script (create_logs.py). This folder also includes a default configuration file (logging_config.json) to streamline setup and customization.
+**visualization**: Contains the visualization tool script (EvosuiteVisualizer.py). This script serves as the entry point to the EvoSuite Visualizer, allowing users to generate visualizations from log files. A default configuration file (visualization_config.json) is provided for convenience and can be edited to customize the tool's behavior.
 
 ### src
 
@@ -170,31 +184,31 @@ The EvoSuite Visualizer processes log files generated during the EvoSuite testin
 
 ### Prerequisites
 
-#### Prerequisites for EvoSuite Visualizer
-
-[PLACEHOLDER: List the system requirements and dependencies needed to run the visualization tool. Mention specific versions of Python or libraries, if applicable.]
-
-#### Prerequisites for EvoSuite Logger
-
-[PLACEHOLDER: List the system requirements and dependencies needed to run the log generation tool. Mention any unique dependencies or requirements for this tool.]
+Both tools require Docker to be installed. For the EvoSuite Logger, the ability to compile Java projects is necessary. The provided Docker image already includes Maven, offering a convenient option for users. No additional setup is required.
 
 ### Setup
 
-#### Setup for EvoSuite Visualizer
+Setting up the EvoSuite Visualizer is straightforward: 
 
-The EvoSuite Visualizer is ready to use immediately after cloning the GitHub repository. To use it, simply run the run_visualizations.py script and pass it paramters or use alternative methods of communicating with the script as described in the usage section. 
+1. Install Docker Desktop.  
+2. Install Maven or an other program to compile Java projects if you plan to use the EvoSuite Logger.  
+3. Clone this repository.  
+4. Build the Docker image.  
 
-#### Setup for EvoSuite Logger
-
-[PLACEHOLDER: Provide step-by-step instructions for setting up the log generation tool. Include any additional setup steps specific to this tool.]
+With these steps, the installation is complete.
 
 ## Usage
 
 ### EvoSuite Visualizer Usage
 
-To use the visualization tool, run the run_visualizations.py script with the required parameters.
+To use the visualization tool, execute the `EvoSuiteVisualizer.py` script with the required parameters using the Docker image. The tool provides real-time progress updates, so we recommend using the `-it` flag for the Docker container.
 
-The script requires parameters, listed below, to be select ed before each execution. If a parameter is passed as a command-line argument, it will take precedence. If it is not provided in the command line, the script checks if a configuration file is specified and tries to retrieve the parameter from there. If neither an argument nor a configuration file entry is available, the script falls back to hardcoded default values. This approach ensures maximum ease of use and flexibility.
+The general pattern for running the `EvoSuiteVisualizer.py` script with Docker is:  
+`docker run [docker-flags] [docker-image] [command]`
+
+Examples of how to run these commands are provided below.
+
+The EvosuiteVisualizer.py script requires parameters, listed below, to be select ed before each execution. If a parameter is passed as a command-line argument, it will take precedence. If it is not provided in the command line, the script checks if a configuration file is specified and tries to retrieve the parameter from there. If neither an argument nor a configuration file entry is available, the script falls back to hardcoded default values. This approach ensures maximum ease of use and flexibility.
 
 #### Parameters:
 
@@ -218,17 +232,61 @@ The script requires parameters, listed below, to be select ed before each execut
 
 **Basic Command**:
 ```bash
-python run_visualizations.py --input_directory /path/to/logs --output_directory /path/to/results
+docker run -it -v "absolute/path/to/logs:/app/logs" [docker-image] python3 scripts/visualization/EvosuiteVisualizer.py --input_directory "/app/logs" --strategy "sequential"
 ```
 
 **Custom Output Filename**:
 ```bash
-python run_visualizations.py --input_directory /path/to/logs --output_filename custom_visualization.pdf
+docker run -it -v "absolute/path/to/logs:/app/logs" [docker-image] python3 scripts/visualization/EvosuiteVisualizer.py --input_directory /app/logs --output_filename "custom_visualization.pdf"
 ```
 
-### Log Generation Tool Usage
+**With Custom Configuration File**:
 
-[PLACEHOLDER: Provide step-by-step instructions for using the log generation tool. Include example commands, explain any required inputs, and describe the output logs.]
+```bash
+docker run -it -v "absolute/path/to/logs:/app/logs" -v "/path/to/config:/app/config" [docker-image] python3 scripts/visualization/EvosuiteVisualizer.py --input_directory "/app/logs" --config "/absolute/path/to/custom_config.json"
+```
+
+
+### EvoSuite Logger Usage
+
+To use the EvoSuite Logger, execute the `EvosuiteLogger.py` script with the required parameters using the Docker image. The tool supports both direct command-line arguments and JSON configuration files for flexibility.
+
+The general command pattern for running the `EvosuiteLogger.py` script with Docker is:
+```bash
+docker run [docker-flags] [docker-image] [command]
+```
+
+The script allows users to specify program parameters via command-line arguments. If not provided, it will attempt to retrieve these from a configuration file. If neither an argument nor a configuration file is available, the script uses default settings.
+
+#### Parameters:
+
+* **--projectRoot**: Absolute path to the root directory of the Java project.
+
+* **--locations**: Specify class directories and the classes they contain.
+
+* **--parameters**: Additional EvoSuite parameters (e.g., -criterion branch, -Dsearch_budget=60).
+
+* **--config**: Path to a JSON configuration file (optional; use "default" for the predefined file).
+
+* **--parallel**: Enable parallel processing with an optional number of processes (e.g., --parallel 4).
+
+Example Commands:
+Using Direct Command-Line Arguments:
+
+```bash
+docker run -it -v "absolute/path/to/project:/app/project" [docker-image] python3 scripts/log_generation/EvosuiteLogger.py --projectRoot "/app/project" --locations '{"path": "target/classes", "classes": ["tutorial.Stack"]}' --parameters '-criterion branch -Dsearch_budget=60'
+```
+
+Using a Configuration File:
+```bash
+docker run -it -v "absolute/path/to/project:/app/project" -v "absolute/path/to/config:/app/config" [docker-image] python3 scripts/log_generation/EvosuiteLogger.py --config "/app/config/logging_config.json"
+```
+
+Enabling Parallel Processing:
+
+```bash
+docker run -it -v "absolute/path/to/project:/app/project" [docker-image] python3 scripts/log_generation/EvosuiteLogger.py --projectRoot "/app/project" --locations '{"path": "target/classes", "classes": ["tutorial.Stack", "tutorial.Queue"]}' --parameters '-criterion branch' --parallel 4
+```
 
 ## Configuration
 
@@ -242,36 +300,25 @@ It is intended that users can edit the contents of the default configuration fil
 
 if users would like to use the default configuration file, they need to pass "default" to the --config parameter like this:
 ```bash
-python run_visualizations.py --config default
+--config "default"
 ```
 
 Users can also create additional configuration files. For this, they just need to create a new JSON file and specify its path with the --config option:
 
 ```bash
-python run_visualizations.py --config /path/to/custom_config.json
+--config "/path/to/custom_config.json"
 ```
 
-### Configuration for Log Generation Tool
+An example of a log file for the EvoSuite Visualizer can be seen in this repository in scripts/visualization/visualization_config
+
+### Configuration for EvoSuite Logger
 
 [PLACEHOLDER: Explain the purpose of the configuration file for the log generation tool. Describe its default location and parameters, and provide examples of how users can modify it.]
 
-## Examples
+## Additional Example
 
-### Generating Visualizations
+**Custom Example**: Generate all available visualizations from a log directory:
 
-**Basic Example**: Generate all available visualizations from a log directory:
-```bash
-python run_visualizations.py --input_directory /path/to/logs --output_directory /path/to/results
-```
-
-**Custom Example**: Generate specific visualizations with a custom output filename:
-```bash
-python run_visualizations.py --input_directory /path/to/logs --plots new_individuals,final_tests --output_filename analysis.pdf
-```
-
-### Creating Log Files
-
-[PLACEHOLDER: Walk through a concrete example of generating log files using the log generation tool. Include a realistic example command, describe the input, and show the resulting log file.]
 
 ## Output
 
