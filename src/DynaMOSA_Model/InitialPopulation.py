@@ -10,12 +10,26 @@ class InitialPopulation:
 
         #set the instance variables to the values extracted from the raw string
         self.individual_in_initial_population_strings = self.extract_individual_in_initial_population_strings_from_raw_string()
-        self.individuals_in_initial_population = []
-        for individual_in_initial_population_string in self.individual_in_initial_population_strings:
-            self.individuals_in_initial_population.append(Individual_In_Initial_Population(individual_in_initial_population_string, algorithm_execution))
+        self.individuals_in_initial_population = self._initialize_individuals()
+        
+    def _initialize_individuals(self) -> List[Individual_In_Initial_Population]:
+        """
+        Creates Individual_In_Initial_Population objects from the extracted JSON strings.
 
+        Returns:
+            List[Individual_In_Initial_Population]: List of individuals in the initial population.
+        """
+        return [
+            Individual_In_Initial_Population(ind_str, self.algorithm_execution)
+            for ind_str in self._extract_individual_strings()
+        ]
 
-    def extract_individual_in_initial_population_strings_from_raw_string(self):
+    def _extract_individual_strings(self):
+        
+        """
+        Extracts the individual strings from the raw string.
+        """
+
         pattern = r'{ "id":.*?}\n}'
         matches = re.findall(pattern, self.raw_string, re.DOTALL)
         return matches
@@ -24,6 +38,9 @@ class InitialPopulation:
         fitness_sum = 0
         for individual_in_initial_population in self.individuals_in_initial_population:
             fitness_sum += individual_in_initial_population.fitness
+
+        #sum([individual.fitness for individual in self.individuals_in_initial_population])
+
 
         return fitness_sum / len(self.individuals_in_initial_population)
     

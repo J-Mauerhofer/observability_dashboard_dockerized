@@ -266,3 +266,65 @@ class Iteration:
     
     def get_average_crowding_distance(self):
         return self.population.get_average_crowding_distance()
+
+
+    def extract_chromosome_goals_string(log_text: str) -> str:
+        """
+        Extracts and returns the substring that starts with '"Chromosome Goals": {'
+        and ends with the matching closing brace '}' for that block.
+
+        This version attempts to handle braces within double-quoted strings:
+        - Tracks whether we are inside a string.
+        - Ignores curly braces inside strings.
+        - Handles escaped quotes so they don't incorrectly toggle in/out of string mode.
+
+        Raises:
+            ValueError: If 'Chromosome Goals' marker is not found,
+                        if there's no '{' after the marker,
+                        or if matching braces are never closed.
+
+        Returns:
+            str: The entire substring from the marker to the matching closing brace.
+        """
+
+        marker = '"Chromosome Goals":'
+        start_index = log_text.find(marker)
+        if start_index == -1:
+            raise ValueError("Chromosome Goals marker not found in the provided text.")
+
+        brace_start = log_text.find("{", start_index)
+        if brace_start == -1:
+            raise ValueError("No opening brace '{' found after Chromosome Goals marker.")
+
+        brace_count = 0
+        in_string = False
+        escaped = False
+        substring_start = brace_start
+
+        # Scan the text starting at the first '{' after the marker
+        for i in range(substring_start, len(log_text)):
+            char = log_text[i]
+
+            # Check if this character is escaping the next one
+            if char == "\\" and not escaped:
+                escaped = True
+            else:
+                # If we see a quote and we're not escaped, toggle string state
+                if char == '"' and not escaped:
+                    in_string = not in_string
+
+                # Only update brace counts if we're not inside a string
+                if not in_string:
+                    if char == "{":
+                        brace_count += 1
+                    elif char == "}":
+                        brace_count -= 1
+                        if brace_count == 0:
+                            # Found the matching closing brace
+                            return log_text[start_index : i + 1]
+
+                # Reset escaped status if it was set
+                escaped = False
+
+        # If we exit the loop, we never closed all braces
+        raise ValueError("Matching closing brace '}' for Chromosome Goals block was never found.")
