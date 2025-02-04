@@ -349,32 +349,25 @@ The demo container includes all other dependencies (Java, Maven, Python, etc.).
 
 ### Instructions for Linux/macOS
 
-#### 1. Clone the Repository
+#### 1. Clone the Repository and Build the Docker Image
 
 ```bash
 git clone https://github.com/J-Mauerhofer/observability_dashboard_dockerized.git
 cd observability_dashboard_dockerized
-```
-
-#### 2. Build the Docker Image
-
-The following command tries to build the image without \`sudo\`, and if that fails it automatically retries with \`sudo\`:
-
-```bash
 if docker info >/dev/null 2>&1; then
   docker build -t evosuite-tool .
 else
   echo "Docker requires elevated permissions, trying with sudo..."
   sudo docker build -t evosuite-tool .
 fi
+cd ..  # Exit the repo, as it is not needed anymore
 ```
 
-#### 3. Download the Tutorial Stack Project
+#### 2. Download the Tutorial Stack Project
 
-Change to the parent directory and download the Tutorial Stack project. The following snippet will check for \`wget\` or \`curl\`. If neither is found, it attempts to install \`wget\` automatically on systems using \`apt-get\` or \`yum\`.
+The following snippet will check for `wget` or `curl`. If neither is found, it attempts to install `wget` automatically on systems using `apt-get` or `yum`.
 
 ```bash
-cd ..
 if command -v wget >/dev/null 2>&1; then
   wget http://evosuite.org/files/tutorial/Tutorial_Stack.zip
 elif command -v curl >/dev/null 2>&1; then
@@ -400,18 +393,13 @@ unzip Tutorial_Stack.zip
 ## Note:
 If the automated download fails, you can manually download the Tutorial Stack project from: [http://evosuite.org/files/tutorial/Tutorial_Stack.zip](http://evosuite.org/files/tutorial/Tutorial_Stack.zip)
 
-#### 4. Compile the Tutorial Stack Project
-
-Return to the repository directory and compile the Tutorial Stack project using Maven within Docker:
+#### 3. Compile the Tutorial Stack Project
 
 ```bash
-cd observability_dashboard_dockerized
-docker run -v "\$(pwd)/../Tutorial_Stack/Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
+docker run -v "$(pwd)/Tutorial_Stack/Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
 ```
 
-#### 5. Run the Tool
-
-Two examples are provided below.
+#### 4. Run the Tool
 
 **Example 1: Generate Log Files**
 
@@ -437,29 +425,22 @@ docker run --rm -it -v "ABSOLUTE_PATH_TO_LOG_FILES_DIRECTORY:/mnt/log-files-dir"
 
 ### Instructions for Windows (PowerShell)
 
-#### 1. Clone the Repository
+#### 1. Clone the Repository and Build the Docker Image
 
 Open PowerShell and run:
 
 ```powershell
 git clone https://github.com/J-Mauerhofer/observability_dashboard_dockerized.git
 cd observability_dashboard_dockerized
-```
-
-#### 2. Build the Docker Image
-
-Run the following command in PowerShell (use Administrator mode if you run into permission issues):
-
-```powershell
 docker build -t evosuite-tool .
+cd ..  # Exit the repo, as it is not needed anymore
 ```
 
-#### 3. Download the Tutorial Stack Project
+#### 2. Download the Tutorial Stack Project
 
 Navigate to the parent directory and run:
 
 ```powershell
-cd ..
 Invoke-WebRequest -Uri "http://evosuite.org/files/tutorial/Tutorial_Stack.zip" -OutFile "Tutorial_Stack.zip"
 Expand-Archive -Path "Tutorial_Stack.zip" -DestinationPath .
 ```
@@ -467,16 +448,13 @@ Expand-Archive -Path "Tutorial_Stack.zip" -DestinationPath .
 ## Note:
 If the automated download fails, you can manually download the Tutorial Stack project from: [http://evosuite.org/files/tutorial/Tutorial_Stack.zip](http://evosuite.org/files/tutorial/Tutorial_Stack.zip)
 
-#### 4. Compile the Tutorial Stack Project
-
-Return to the repository directory and compile the project:
+#### 3. Compile the Tutorial Stack Project
 
 ```powershell
-cd observability_dashboard_dockerized
-docker run -v "${PWD}\..\Tutorial_Stack\Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
+docker run -v "${PWD}\Tutorial_Stack\Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
 ```
 
-#### 5. Run the Tool
+#### 4. Run the Tool
 
 **Example 1: Generate Log Files**
 
