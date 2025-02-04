@@ -340,72 +340,64 @@ The Observability Toolsuite for EvoSuite was developed by both Dominik Fischli a
 
 ### Prerequisites
 
-Ensure that you have **Docker** installed on your system. The demo container includes all other dependencies (Java, Maven, Python, and required libraries). This demo has been tested on **Linux**, **macOS**, and **Windows** (using Docker Desktop). For Windows, make sure to run Docker in a compatible environment (e.g., PowerShell, Git Bash, or WSL).
+Make sure that **Docker** is installed and functioning on your system.  
+- **Linux/macOS:** If you encounter permission issues with Docker commands, the commands below will automatically try using \`sudo\` when needed.  
+- **Linux/macOS:** Either `wget` or `curl` must be installed to download files (the script will use whichever is available).  
+- **Windows:** Use Docker Desktop and run the commands in PowerShell (run as Administrator if needed).
 
-### Step 1: Clone the Repository
+The demo container includes all other dependencies (Java, Maven, Python, etc.).
 
-Open your terminal (or Command Prompt/PowerShell on Windows) and execute:
+### Instructions for Linux/macOS
+
+#### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/J-Mauerhofer/observability_dashboard_dockerized.git
 cd observability_dashboard_dockerized
 ```
 
-### Step 2: Build the Docker Image
+#### 2. Build the Docker Image
 
-Build the Docker image using the provided Dockerfile:
+The following command tries to build the image without \`sudo\`, and if that fails it automatically retries with \`sudo\`:
 
 ```bash
-docker build -t evosuite-tool .
+if docker info >/dev/null 2>&1; then
+  docker build -t evosuite-tool .
+else
+  echo "Docker requires elevated permissions, trying with sudo..."
+  sudo docker build -t evosuite-tool .
+fi
 ```
 
-This command creates a Docker image named `evosuite-tool`.
+#### 3. Download the Tutorial Stack Project
 
-### Step 3: Download the Tutorial Stack Project
-
-The Tutorial Stack Project is required for the demo. Download and extract it into the parent directory of `observability_dashboard_dockerized`.
-
-**For Linux/macOS:**
+Change to the parent directory and download the Tutorial Stack project. This snippet uses \`wget\` if available, or \`curl\` otherwise:
 
 ```bash
 cd ..
-wget http://evosuite.org/files/tutorial/Tutorial_Stack.zip
+if command -v wget >/dev/null 2>&1; then
+  wget http://evosuite.org/files/tutorial/Tutorial_Stack.zip
+elif command -v curl >/dev/null 2>&1; then
+  curl -LO http://evosuite.org/files/tutorial/Tutorial_Stack.zip
+else
+  echo "Error: neither wget nor curl is installed. Please install one of these utilities." >&2
+  exit 1
+fi
 unzip Tutorial_Stack.zip
 ```
 
-**For Windows (using PowerShell):**
+#### 4. Compile the Tutorial Stack Project
 
-```powershell
-cd ..
-Invoke-WebRequest -Uri "http://evosuite.org/files/tutorial/Tutorial_Stack.zip" -OutFile "Tutorial_Stack.zip"
-Expand-Archive -Path "Tutorial_Stack.zip" -DestinationPath .
-```
-
-Alternatively, Windows users can download the project manually by visiting: [http://evosuite.org/files/tutorial/Tutorial_Stack.zip](http://evosuite.org/files/tutorial/Tutorial_Stack.zip)
-
-Ensure that the extracted `Tutorial_Stack` folder is in the same directory as `observability_dashboard_dockerized`.
-
-### Step 4: Compile the Tutorial Stack Project
-
-Compile the Tutorial Stack project using Maven within the Docker container.
-
-**For Linux/macOS:**
+Return to the repository directory and compile the Tutorial Stack project using Maven within Docker:
 
 ```bash
 cd observability_dashboard_dockerized
 docker run -v "\$(pwd)/../Tutorial_Stack/Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
 ```
 
-**For Windows (using PowerShell):**
+#### 5. Run the Tool
 
-```powershell
-cd observability_dashboard_dockerized
-docker run -v "${PWD}\..\Tutorial_Stack\Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
-```
-
-### Step 5: Run the Tool
-
-You can now execute the tool. Two examples are provided below:
+Two examples are provided below.
 
 **Example 1: Generate Log Files**
 
@@ -415,22 +407,79 @@ Replace `ABSOLUTE_PATH_TO_TUTORIAL_STACK` with the absolute path to your `Tutori
 docker run --rm -it -v "ABSOLUTE_PATH_TO_TUTORIAL_STACK:/mnt/project-base-dir" evosuite-tool python3 scripts/log_generation/EvosuiteLogger.py "/mnt/project-base-dir" -class tutorial.Stack -projectCP target/classes -Dsearch_budget=60
 ```
 
-This command mounts your project directory into the container and runs the logger for a 60-second log generation.
-
 **Example 2: Generate Visualizations**
 
-After generating the log files, run the visualization script by replacing \`ABSOLUTE_PATH_TO_LOG_FILES_DIRECTORY\` with the path to your log files directory (typically \`Tutorial_Stack/LogFiles_EvoSuiteLogger\`):
+After generating the log files, replace `ABSOLUTE_PATH_TO_LOG_FILES_DIRECTORY` with the absolute path to your log files directory (typically `Tutorial_Stack/LogFiles_EvoSuiteLogger`), then run:
 
 ```bash
 docker run --rm -it -v "ABSOLUTE_PATH_TO_LOG_FILES_DIRECTORY:/mnt/log-files-dir" evosuite-tool python3 scripts/visualization/EvosuiteVisualizer.py --input_directory "/mnt/log-files-dir"
 ```
 
-This will generate visualizations (this process may take up to 2 minutes).
+#### Final Notes (Linux/macOS)
 
-### Final Notes
+- Generated visualizations will be in the `visualization` folder inside the `LogFiles_EvoSuiteLogger` directory within the `Tutorial_Stack` project.
+- If you encounter issues, verify your absolute paths and ensure Docker has the necessary permissions.
+- For persistent permission issues on Linux, consider adding your user to the Docker group.
 
-- The generated visualizations will be located in the `visualization` folder inside the `LogFiles_EvoSuiteLogger` directory within the `Tutorial_Stack` project.
-- If you encounter issues, verify that your absolute paths are correctly specified and that Docker has access to the mounted directories.
-- Windows users might find Git Bash or PowerShell more compatible with Unix-style commands.
+### Instructions for Windows (PowerShell)
+
+#### 1. Clone the Repository
+
+Open PowerShell and run:
+
+```powershell
+git clone https://github.com/J-Mauerhofer/observability_dashboard_dockerized.git
+cd observability_dashboard_dockerized
+```
+
+#### 2. Build the Docker Image
+
+Run the following command in PowerShell (use Administrator mode if you run into permission issues):
+
+```powershell
+docker build -t evosuite-tool .
+```
+
+#### 3. Download the Tutorial Stack Project
+
+Navigate to the parent directory and run:
+
+```powershell
+cd ..
+Invoke-WebRequest -Uri "http://evosuite.org/files/tutorial/Tutorial_Stack.zip" -OutFile "Tutorial_Stack.zip"
+Expand-Archive -Path "Tutorial_Stack.zip" -DestinationPath .
+```
+
+#### 4. Compile the Tutorial Stack Project
+
+Return to the repository directory and compile the project:
+
+```powershell
+cd observability_dashboard_dockerized
+docker run -v "${PWD}\..\Tutorial_Stack\Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
+```
+
+#### 5. Run the Tool
+
+**Example 1: Generate Log Files**
+
+Replace `ABSOLUTE_PATH_TO_TUTORIAL_STACK` with the absolute path to your `Tutorial_Stack` directory, then run:
+
+```powershell
+docker run --rm -it -v "ABSOLUTE_PATH_TO_TUTORIAL_STACK:/mnt/project-base-dir" evosuite-tool python3 scripts/log_generation/EvosuiteLogger.py "/mnt/project-base-dir" -class tutorial.Stack -projectCP target/classes -Dsearch_budget=60
+```
+
+**Example 2: Generate Visualizations**
+
+Replace `ABSOLUTE_PATH_TO_LOG_FILES_DIRECTORY` with the absolute path to your log files directory, then run:
+
+```powershell
+docker run --rm -it -v "ABSOLUTE_PATH_TO_LOG_FILES_DIRECTORY:/mnt/log-files-dir" evosuite-tool python3 scripts/visualization/EvosuiteVisualizer.py --input_directory "/mnt/log-files-dir"
+```
+
+#### Final Notes (Windows)
+
+- Generated visualizations will appear in the `visualization` folder inside the `LogFiles_EvoSuiteLogger` directory within the `Tutorial_Stack` project.
+- If you experience issues, ensure your paths are correct and consider running PowerShell as Administrator.
 
 Happy testing!
