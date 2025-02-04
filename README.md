@@ -341,8 +341,8 @@ The Observability Toolsuite for EvoSuite was developed by both Dominik Fischli a
 ### Prerequisites
 
 Make sure that **Docker** is installed and functioning on your system.  
-- **Linux/macOS:** If you encounter permission issues with Docker commands, the commands below will automatically try using \`sudo\` when needed.  
-- **Linux/macOS:** Either `wget` or `curl` must be installed to download files (the script will use whichever is available).  
+- **Linux/macOS:** If you encounter permission issues with Docker commands, the commands below will automatically try using `sudo` when needed.  
+- **Linux/macOS:** Either `wget` or `curl` must be installed to download files. This demo includes commands to automatically install `wget` on Debian/Ubuntu or RHEL/CentOS systems if neither is found.
 - **Windows:** Use Docker Desktop and run the commands in PowerShell (run as Administrator if needed).
 
 The demo container includes all other dependencies (Java, Maven, Python, etc.).
@@ -371,7 +371,7 @@ fi
 
 #### 3. Download the Tutorial Stack Project
 
-Change to the parent directory and download the Tutorial Stack project. This snippet uses \`wget\` if available, or \`curl\` otherwise:
+Change to the parent directory and download the Tutorial Stack project. The following snippet will check for \`wget\` or \`curl\`. If neither is found, it attempts to install \`wget\` automatically on systems using \`apt-get\` or \`yum\`.
 
 ```bash
 cd ..
@@ -380,11 +380,25 @@ if command -v wget >/dev/null 2>&1; then
 elif command -v curl >/dev/null 2>&1; then
   curl -LO http://evosuite.org/files/tutorial/Tutorial_Stack.zip
 else
-  echo "Error: neither wget nor curl is installed. Please install one of these utilities." >&2
-  exit 1
+  echo "Neither wget nor curl is installed. Attempting to install wget..."
+  if command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get update && sudo apt-get install -y wget
+    wget http://evosuite.org/files/tutorial/Tutorial_Stack.zip
+  elif command -v yum >/dev/null 2>&1; then
+    sudo yum install -y wget
+    wget http://evosuite.org/files/tutorial/Tutorial_Stack.zip
+  else
+    echo "Automatic installation of wget/curl is not supported on this system."
+    echo "Please install wget or curl manually, or manually download the Tutorial Stack project from:"
+    echo "http://evosuite.org/files/tutorial/Tutorial_Stack.zip"
+    exit 1
+  fi
 fi
 unzip Tutorial_Stack.zip
 ```
+
+## Note:
+If the automated download fails, you can manually download the Tutorial Stack project from: [http://evosuite.org/files/tutorial/Tutorial_Stack.zip](http://evosuite.org/files/tutorial/Tutorial_Stack.zip)
 
 #### 4. Compile the Tutorial Stack Project
 
@@ -449,6 +463,9 @@ cd ..
 Invoke-WebRequest -Uri "http://evosuite.org/files/tutorial/Tutorial_Stack.zip" -OutFile "Tutorial_Stack.zip"
 Expand-Archive -Path "Tutorial_Stack.zip" -DestinationPath .
 ```
+
+## Note:
+If the automated download fails, you can manually download the Tutorial Stack project from: [http://evosuite.org/files/tutorial/Tutorial_Stack.zip](http://evosuite.org/files/tutorial/Tutorial_Stack.zip)
 
 #### 4. Compile the Tutorial Stack Project
 
