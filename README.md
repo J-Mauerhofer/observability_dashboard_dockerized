@@ -63,13 +63,17 @@ cd observability_dashboard_dockerized
 
 #### 2. Build the Docker Image
 
-Build the Docker image using the provided `Dockerfile`:
+Make sure Docker is installed and running, and that you have the necessary permissions to build the image.
+
+Build the Docker image using the provided `Dockerfile`. 
 
 ```bash
 docker build -t evosuite-tool .
 ```
 
 This command creates a Docker image named `evosuite-tool`.
+
+
 
 #### 3. Obtain the Tutorial Stack Project
 
@@ -81,14 +85,24 @@ Navigate up one directory:
 cd ..
 ```
 
+
+##### If you have curl installed (this comes preinstalled with most new operating systems):
+
 ##### For macOS and Linux:
 
 ```bash
-wget http://evosuite.org/files/tutorial/Tutorial_Stack.zip
+curl -O http://evosuite.org/files/tutorial/Tutorial_Stack.zip
 unzip Tutorial_Stack.zip
 ```
 
 ##### For Windows:
+
+```bash
+curl -O http://evosuite.org/files/tutorial/Tutorial_Stack.zip
+Expand-Archive -Path "Tutorial_Stack.zip" -DestinationPath .
+```
+
+##### If you DO NOT have curl installed:
 
 Copy and paste the following link into your web browser's address bar to download the project:
 
@@ -96,14 +110,29 @@ Copy and paste the following link into your web browser's address bar to downloa
 http://evosuite.org/files/tutorial/Tutorial_Stack.zip
 ```
 
+Manually unzip the project.
+
+
+
 #### 4. Compile the Tutorial Stack Project
 
-Compile the Tutorial Stack project by using maven which is included in our docker container. Replace '/ABSOLUTE/PATH/TO/Tutorial_Stack/Tutorial_Stack:/tutorial-stack-project' with the actual path to the base directory of the tutorial stack project:
+Compile the Tutorial Stack project by using maven which is included in our docker container. In the command below, replace
+
+```bash
+'/ABSOLUTE/PATH/TO/Tutorial_Stack/Tutorial_Stack:/tutorial-stack-project'
+```
+
+with the actual path to the base directory of the tutorial stack project. Then, run this command to compile the Tutorial Stack project:
+
 
 ```bash
 docker run -v "/ABSOLUTE/PATH/TO/Tutorial_Stack/Tutorial_Stack:/tutorial-stack-project" -w /tutorial-stack-project evosuite-tool mvn compile
 
 ```
+
+As with all docker commands, make sure Docker is installed and running, and that you have the necessary permissions to run this command.
+
+
 
 #### 5. Execute the Program
 
@@ -111,14 +140,22 @@ With the setup complete, use the examples below to run the observability dashboa
 
 **Example 1: Generate Log Files**
 
-To generate log files, execute the following command:
+
+The command below mounts the specified path into the container and runs the `EvosuiteLogger.py` script to generate log files. Replace
+```bash
+`ABSOLUTE_PATH_TO_TUTORIAL_STACK_PROJECT_BASE_DIRECTORY`
+```
+with the absolute path to the base directory of your `Tutorial_Stack` project.
+The process should take exactly 60 seconds.
+
+Now to generate log files, replace the placeholder path with your actual absolute path and execute the following command:
 
 ```bash
 docker run --rm -it -v "ABSOLUTE_PATH_TO_TUTORIAL_STACK_PROJECT_BASE_DIRECTORY:/mnt/project-base-dir" evosuite-tool python3 scripts/log_generation/EvosuiteLogger.py "/mnt/project-base-dir" -class tutorial.Stack -projectCP target/classes -Dsearch_budget=60
 ```
+As with all docker commands, make sure Docker is installed and running, and that you have the necessary permissions to run this command.
 
-This command mounts the specified path into the container and runs the `EvosuiteLogger.py` script to generate log files. Replace `ABSOLUTE_PATH_TO_TUTORIAL_STACK_PROJECT_BASE_DIRECTORY` with the absolute path to your `Tutorial_Stack` directory.
-The process should take exactly 60 seconds.
+
 
 **Example 2: Generate Visualizations**
 
@@ -128,10 +165,20 @@ To generate visualizations, specify the absolute path to the directory containin
 docker run --rm -it -v "ABSOLUTE_PATH_TO_LOG_FILES_DIRECTORY:/mnt/log-files-dir" evosuite-tool python3 scripts/visualization/EvosuiteVisualizer.py --input_directory "/mnt/log-files-dir"
 ```
 
-This command mounts the log files directory into the container and runs the `EvosuiteVisualizer.py` script to create visualizations. Replace `ABSOLUTE_PATH_TO_LOG_FILES_DIRECTORY` with the correct path to your log files directory.
+This command mounts the log files directory into the container and runs the `EvosuiteVisualizer.py` script to create visualizations. Replace 
+```bash
+`ABSOLUTE_PATH_TO_LOG_FILES_DIRECTORY`
+```
+with the absolute path to your log files directory.
 This process should take no more than 2 minutes.
 
 ---
+
+
+As with all docker commands, make sure Docker is installed and running, and that you have the necessary permissions to run this command.
+
+
+
 
 The visualizations have now been successfully generated! They can be found in the directory `\LogFiles_EvoSuiteLogger\visualization` within the Tutorial Stack project directory.
 
