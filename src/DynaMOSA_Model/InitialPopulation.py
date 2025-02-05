@@ -1,5 +1,6 @@
 import re
 from src.DynaMOSA_Model.Individual_in_Initial_Population import Individual_In_Initial_Population
+from typing import List
 
 class InitialPopulation:
 
@@ -9,7 +10,7 @@ class InitialPopulation:
         self.algorithm_execution = algorithm_execution
 
         #set the instance variables to the values extracted from the raw string
-        self.individual_in_initial_population_strings = self.extract_individual_in_initial_population_strings_from_raw_string()
+        self.individual_in_initial_population_strings = self._extract_individual_strings()
         self.individuals_in_initial_population = self._initialize_individuals()
         
     def _initialize_individuals(self) -> List[Individual_In_Initial_Population]:
