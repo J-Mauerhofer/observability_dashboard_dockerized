@@ -48,7 +48,7 @@ These tools work together to support academic research and practical analysis, o
 
 ### Prerequisites
 
-To run the demo, ensure Docker is installed on your system. All other dependencies, including Java, Maven, Python, and necessary libraries, are managed within the Docker environment.
+To run the demo, ensure Docker is installed and running on your system. All other dependencies, including Java, Maven, Python, and necessary libraries, are managed within the Docker environment.
 
 ### Running the Demo
 
@@ -91,18 +91,18 @@ cd ..
 ##### For macOS and Linux:
 
 ```bash
-curl -O http://evosuite.org/files/tutorial/Tutorial_Stack.zip
+curl -L -O http://evosuite.org/files/tutorial/Tutorial_Stack.zip
 unzip Tutorial_Stack.zip
 ```
 
-##### For Windows:
+##### For Windows (10 or newer):
 
 ```bash
-curl -O http://evosuite.org/files/tutorial/Tutorial_Stack.zip
+curl -L -O http://evosuite.org/files/tutorial/Tutorial_Stack.zip
 Expand-Archive -Path "Tutorial_Stack.zip" -DestinationPath .
 ```
 
-##### If you DO NOT have curl installed:
+##### If you DO NOT have curl installed or anything else went wrong:
 
 Copy and paste the following link into your web browser's address bar to download the project:
 
@@ -119,7 +119,7 @@ Manually unzip the project.
 Compile the Tutorial Stack project by using maven which is included in our docker container. In the command below, replace
 
 ```bash
-'/ABSOLUTE/PATH/TO/Tutorial_Stack/Tutorial_Stack:/tutorial-stack-project'
+'/ABSOLUTE/PATH/TO/Tutorial_Stack/Tutorial_Stack'
 ```
 
 with the actual path to the base directory of the tutorial stack project. Then, run this command to compile the Tutorial Stack project:
@@ -172,15 +172,16 @@ This command mounts the log files directory into the container and runs the `Evo
 with the absolute path to your log files directory.
 This process should take no more than 2 minutes.
 
+As with all docker commands, make sure Docker is installed and running, and that you have the necessary permissions to run this command.
+
 ---
 
 
-As with all docker commands, make sure Docker is installed and running, and that you have the necessary permissions to run this command.
 
 
 
 
-The visualizations have now been successfully generated! They can be found in the directory `\LogFiles_EvoSuiteLogger\visualization` within the Tutorial Stack project directory.
+The visualizations have now been successfully generated! They can be found as pdf's in the directory `\LogFiles_EvoSuiteLogger\visualization` within the Tutorial Stack project directory.
 
 Below is an example of the visualizations you can expect (please note that your results may vary depending on the seed used):
 
